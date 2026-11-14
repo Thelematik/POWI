@@ -7,4 +7,4 @@ Alle Dateien liegen lokal, damit beim Aufruf keine Verbindung zu externen Server
 | d3 | 7.8.5 | ISC |
 | TopoJSON | 3.0.2 | ISC |
 
-Schriften in `assets/fonts` (über Fontsource): Barlow Condensed, Fraunces, IBM Plex Mono, Source Sans 3. Alle unter der SIL Open Font License 1.1.
+Schriften in `assets/fonts` (über Fontsource): Source Sans 3 für den Fließtext, Source Serif 4 für Überschriften und Source Code Pro für Zahlen und Beschriftungen. Alle unter der SIL Open Font License 1.1.

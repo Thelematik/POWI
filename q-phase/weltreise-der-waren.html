@@ -1,6 +1,14 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:17px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Weltreise der Waren</title>
 <link rel="stylesheet" href="../assets/fonts/fonts.css">
+<style id="typo-basis">
+/* Einheitliche Schriften: Text Source Sans 3, Überschriften Source Serif 4, Zahlen Source Code Pro */
+html{font-size:19px}
+body{font-family:"Source Sans 3", system-ui, sans-serif}
+h1,h2,h3{font-family:"Source Serif 4", Georgia, serif}
+button,input,select,textarea{font-family:inherit}
+code,kbd,samp,pre{font-family:"Source Code Pro", ui-monospace, monospace}
+</style>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
 /* Layout: Globus als Arbeitsfläche links, Frachtpapier-Panel rechts; auf dem Handy untereinander */
@@ -10,9 +18,9 @@
   --jeans:#2D4A9F; --copper:#A4561B; --acc:var(--jeans);
   --t-roh:#8A6A12; --t-ver:#22767A; --t-mon:#2D4A9F; --t-han:#6A4BA2; --t-ent:#A13A3A;
   --ok:#25744A; --bad:#B3261E; --shade:rgba(10,30,40,.28);
-  --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-display:"Source Serif 4","Arial Narrow",system-ui,sans-serif;
   --f-body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
-  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --f-mono:"Source Code Pro","Source Code Pro", ui-monospace, monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0F1519; --surface:#162027; --surface-2:#1D2930; --ink:#E5EBE7; --muted:#97A49F; --line:#2B3940;
@@ -30,7 +38,7 @@
 
 *{box-sizing:border-box}
 html,body{height:100%}
-body{background:var(--bg);color:var(--ink);font:16px/1.5 var(--f-body);
+body{background:var(--bg);color:var(--ink);font:19px/1.5 var(--f-body);
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 24px}
 button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
@@ -151,6 +159,14 @@ h3{font-size:1.25rem}
 .q .fb{font-size:.9rem}
 .score{font-family:var(--f-display);font-size:1.4rem}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:700px){
+  /* Auf dem Handy die Beschriftungen auf dem Globus kompakt halten */
+  .hud .big{font-size:1.55rem}.hud .small{font-size:.7rem}
+  .play{padding:7px 12px;font-size:.85rem}
+  .legend{font-size:.7rem}
+  .seg.sm button{font-size:.74rem;padding:3px 9px}
+  #alt{font-size:.85rem}
+}
 </style>
 
 <header class="top">
@@ -596,7 +612,7 @@ function draw(time){
     if(sel){ctx.beginPath(); ctx.arc(q.x,q.y,r+6+Math.sin(time/300)*2,0,Math.PI*2); ctx.strokeStyle=C[s.type]; ctx.globalAlpha=0.5; ctx.lineWidth=2; ctx.stroke(); ctx.globalAlpha=1;}
     ctx.beginPath(); ctx.arc(q.x,q.y,r,0,Math.PI*2); ctx.fillStyle=C[s.type]; ctx.fill();
     ctx.lineWidth=2; ctx.strokeStyle=C.surface; ctx.stroke();
-    ctx.fillStyle=C.surface; ctx.font=`600 ${sel?11:9.5}px "IBM Plex Mono", monospace`; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle=C.surface; ctx.font=`600 ${sel?11:9.5}px "Source Code Pro", monospace`; ctx.textAlign='center'; ctx.textBaseline='middle';
     ctx.fillText(String(i+1),q.x,q.y+0.5);
     if(sel || S.zoom>1.3){
       ctx.font='600 12px "Source Sans 3", sans-serif'; ctx.textAlign='left';

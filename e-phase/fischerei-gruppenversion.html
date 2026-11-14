@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Das Fischerei-Experiment: Gruppenversion</title>
 <link rel="stylesheet" href="../assets/fonts/fonts.css">
+<style id="typo-basis">
+/* Einheitliche Schriften: Text Source Sans 3, Überschriften Source Serif 4, Zahlen Source Code Pro */
+html{font-size:17.5px}
+body{font-family:"Source Sans 3", system-ui, sans-serif}
+h1,h2,h3{font-family:"Source Serif 4", Georgia, serif}
+button,input,select,textarea{font-family:inherit}
+code,kbd,samp,pre{font-family:"Source Code Pro", ui-monospace, monospace}
+</style>
 <style>
 
 :root{
@@ -21,64 +29,64 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
-body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.5;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Source Sans 3", system-ui, sans-serif;font-size:18.5px;line-height:1.5;-webkit-text-size-adjust:100%}
 .wrap{max-width:600px;margin:0 auto;padding:12px 14px 40px}
 header.top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0 10px}
-header.top .brand{font-weight:700;font-size:16px}
+header.top .brand{font-weight:700;font-size:17.5px}
 header.top .tools{display:flex;gap:8px}
 header.top .brand{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.iconbtn{white-space:nowrap;min-height:44px;min-width:44px;padding:0 10px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:15px;font-weight:600;cursor:pointer}
+.iconbtn{white-space:nowrap;min-height:44px;min-width:44px;padding:0 10px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:16.5px;font-weight:600;cursor:pointer}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin:12px 0}
-h1{font-size:26px;line-height:1.2;margin:4px 0 10px}
-h2{font-size:21px;line-height:1.25;margin:0 0 10px}
-h3{font-size:17px;margin:14px 0 6px}
+h1{font-size:28.5px;line-height:1.2;margin:4px 0 10px}
+h2{font-size:23px;line-height:1.25;margin:0 0 10px}
+h3{font-size:18.5px;margin:14px 0 6px}
 p{margin:8px 0}
 .muted{color:var(--muted)}
-.small{font-size:14px}
-.btn{display:block;width:100%;min-height:54px;border:0;border-radius:14px;background:var(--accent);color:var(--accent-ink);font-size:18px;font-weight:700;cursor:pointer;margin-top:14px}
+.small{font-size:15.5px}
+.btn{display:block;width:100%;min-height:54px;border:0;border-radius:14px;background:var(--accent);color:var(--accent-ink);font-size:20px;font-weight:700;cursor:pointer;margin-top:14px}
 .btn.secondary{background:var(--soft);color:var(--ink);border:1px solid var(--line)}
 .btn:disabled{opacity:.45;cursor:not-allowed}
-input[type=text],textarea{width:100%;min-height:50px;font-size:17px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-family:inherit}
+input[type=text],textarea{width:100%;min-height:50px;font-size:18.5px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-family:inherit}
 textarea{min-height:90px;resize:vertical}
 ul.rules{padding-left:20px;margin:8px 0}
 ul.rules li{margin:4px 0}
-.pill{display:inline-block;padding:3px 10px;border-radius:999px;background:var(--soft);font-size:14px;font-weight:600}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;background:var(--soft);font-size:15.5px;font-weight:600}
 .lake{width:100%;height:auto;display:block;border-radius:14px}
 .statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
 .stat{background:var(--soft);border-radius:12px;padding:10px 8px;text-align:center}
-.stat .v{font-size:24px;font-weight:800;line-height:1.1}
-.stat .l{font-size:12.5px;color:var(--muted);margin-top:2px}
+.stat .v{font-size:26.5px;font-weight:800;line-height:1.1}
+.stat .l{font-size:14px;color:var(--muted);margin-top:2px}
 .stepper{display:flex;align-items:center;gap:10px;margin:12px 0 4px}
-.stepper button{width:60px;height:60px;border-radius:16px;border:1px solid var(--line);background:var(--soft);color:var(--ink);font-size:30px;font-weight:700;cursor:pointer;flex:none}
+.stepper button{width:60px;height:60px;border-radius:16px;border:1px solid var(--line);background:var(--soft);color:var(--ink);font-size:33px;font-weight:700;cursor:pointer;flex:none}
 .stepper .val{flex:1;text-align:center}
-.stepper .val .n{font-size:44px;font-weight:800;line-height:1}
-.stepper .val .u{font-size:14px;color:var(--muted)}
+.stepper .val .n{font-size:48.5px;font-weight:800;line-height:1}
+.stepper .val .u{font-size:15.5px;color:var(--muted)}
 input[type=range]{width:100%;height:44px;accent-color:var(--accent)}
-table{width:100%;border-collapse:collapse;font-size:15.5px}
+table{width:100%;border-collapse:collapse;font-size:17px}
 th,td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:right}
 th:first-child,td:first-child{text-align:left}
-th{font-size:13px;color:var(--muted);font-weight:600}
+th{font-size:14.5px;color:var(--muted);font-weight:600}
 tr.me td{font-weight:700}
-.note{background:var(--soft);border-radius:12px;padding:12px;margin:10px 0;font-size:15.5px}
+.note{background:var(--soft);border-radius:12px;padding:12px;margin:10px 0;font-size:17px}
 .note.warn{border-left:5px solid var(--warn)}
 .note.good{border-left:5px solid var(--good)}
 .boat{display:flex;gap:10px;align-items:flex-start;margin:8px 0}
-.boat .ic{font-size:26px;line-height:1}
-.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin-top:6px}
+.boat .ic{font-size:28.5px;line-height:1}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:15.5px;margin-top:6px}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{display:inline-block;width:18px;height:4px;border-radius:2px}
 .chart{width:100%;height:auto;display:block}
 .q{border-top:1px solid var(--line);padding-top:12px;margin-top:14px}
 .opts{display:grid;gap:8px;margin-top:8px}
-.opt{min-height:50px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:16px;text-align:left;cursor:pointer;font-family:inherit}
+.opt{min-height:50px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:17.5px;text-align:left;cursor:pointer;font-family:inherit}
 .opt.sel{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
 .opt.right{border-color:var(--good);box-shadow:inset 0 0 0 2px var(--good)}
 .opt.wrong{border-color:var(--warn);box-shadow:inset 0 0 0 2px var(--warn)}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.fb{margin-top:8px;font-size:15.5px}
-.grid4{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px;font-size:14.5px;margin-top:8px}
+.fb{margin-top:8px;font-size:17px}
+.grid4{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px;font-size:16px;margin-top:8px}
 .grid4 div{padding:10px 8px;border-radius:10px;background:var(--soft)}
-.grid4 .h{background:transparent;font-weight:700;font-size:13px;color:var(--muted);display:flex;align-items:center}
+.grid4 .h{background:transparent;font-weight:700;font-size:14.5px;color:var(--muted);display:flex;align-items:center}
 .grid4 .hl{box-shadow:inset 0 0 0 2px var(--fish)}
 details{border:1px solid var(--line);border-radius:14px;padding:4px 14px;margin:12px 0;background:var(--card)}
 summary{min-height:48px;display:flex;align-items:center;font-weight:700;cursor:pointer}
@@ -93,15 +101,15 @@ summary{min-height:48px;display:flex;align-items:center;font-weight:700;cursor:p
 
 .plist{display:grid;gap:8px;margin-top:8px}
 .plist .row{display:flex;gap:8px;align-items:center}
-.plist .row span{font-size:22px;width:30px;text-align:center}
+.plist .row span{font-size:24px;width:30px;text-align:center}
 .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
-.seg button{min-height:50px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:18px;font-weight:700;cursor:pointer}
+.seg button{min-height:50px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:20px;font-weight:700;cursor:pointer}
 .seg button.sel{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
 .toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:54px;margin-top:10px}
 .toggle input{width:28px;height:28px;accent-color:var(--accent);flex:none}
 .handover{text-align:center;padding:30px 18px}
-.handover .big{font-size:64px;line-height:1;margin:10px 0}
-.handover h1{font-size:30px}
+.handover .big{font-size:70.5px;line-height:1;margin:10px 0}
+.handover h1{font-size:33px}
 .dots{display:flex;gap:8px;justify-content:center;margin:14px 0}
 .dots i{width:14px;height:14px;border-radius:50%;background:var(--line)}
 .dots i.done{background:var(--accent)}
@@ -304,7 +312,7 @@ tr.sum td{font-weight:700;border-top:2px solid var(--line)}
       <div class="q">
         <b id="q5">5. Was hat in Phase 2 den Unterschied gemacht? Welche weiteren Lösungen wären denkbar?</b>
         <textarea placeholder="z. B. Kontrolle, Vertrauen, Steuern, Eigentumsrechte …"></textarea>
-        <button class="btn secondary" id="ideaBtn" style="min-height:48px;font-size:16px">Ideen anzeigen</button>
+        <button class="btn secondary" id="ideaBtn" style="min-height:48px;font-size:17.5px">Ideen anzeigen</button>
         <div class="note hidden" id="ideas">
           <b>Mögliche Ansätze:</b>
           <ul class="rules">
