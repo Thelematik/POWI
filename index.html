@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Politik und Wirtschaft: Materialien, Methoden und Übungen</title>
+<style>
+  :root {
+    --ink: #22252b;
+    --ink-soft: #5a606b;
+    --paper: #f7f5f0;
+    --rule: #ddd8cc;
+    --accent: #8c1c2b;
+    --card: #ffffff;
+    --line: #dcd7cc;
+    --erklaerung: #2a6fb0;
+    --interaktiv: #2e7d6b;
+    --uebung: #c06a1b;
+    --methode: #6b4fa3;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    line-height: 1.5;
+  }
+  header {
+    background: var(--paper);
+    border-top: 6px solid var(--accent);
+    border-bottom: 3px double var(--ink);
+    padding: 2rem 1.25rem 1.4rem;
+  }
+  .wrap { max-width: 1050px; margin: 0 auto; }
+  .kicker {
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    font-size: .78rem;
+    color: var(--accent);
+    font-weight: 700;
+    margin: 0 0 .35rem;
+  }
+  h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.7rem, 4.2vw, 2.6rem);
+    margin: 0 0 .3rem;
+    line-height: 1.15;
+  }
+  .sub { margin: 0; color: var(--ink-soft); font-size: 1.05rem; }
+
+  main { padding: 1.5rem 1.25rem 3rem; }
+
+  .controls {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1.6rem;
+  }
+  .search {
+    width: 100%;
+    font-size: 1rem;
+    padding: .65rem .85rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--ink);
+    margin-bottom: .8rem;
+  }
+  .search:focus { outline: 2px solid var(--accent); border-color: transparent; }
+  .row { display: flex; flex-wrap: wrap; gap: .45rem; align-items: center; }
+  .row + .row { margin-top: .55rem; }
+  .row-label { font-size: .85rem; color: var(--ink-soft); margin-right: .25rem; min-width: 5.5rem; }
+  .chip {
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    padding: .35rem .8rem;
+    border-radius: 999px;
+    font-size: .9rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .chip:hover { border-color: var(--ink-soft); }
+  .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  section.cat { margin-bottom: 2.2rem; }
+  section.cat h2 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.45rem;
+    margin: 0 0 .2rem;
+    padding-bottom: .3rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  section.cat .cat-desc { margin: .45rem 0 .9rem; color: var(--ink-soft); font-size: .95rem; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: .9rem;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 1rem 1rem .9rem;
+    display: flex;
+    flex-direction: column;
+    gap: .45rem;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  a.card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.10); }
+  .card h3 { margin: 0; font-size: 1.05rem; }
+  .card p { margin: 0; font-size: .92rem; color: var(--ink-soft); flex-grow: 1; }
+  .meta { display: flex; flex-wrap: wrap; gap: .35rem; font-size: .78rem; }
+  .badge { padding: .12rem .55rem; border-radius: 999px; color: #fff; font-weight: 600; }
+  .badge.Erklärung { background: var(--erklaerung); }
+  .badge.Interaktiv { background: var(--interaktiv); }
+  .badge.Übung { background: var(--uebung); }
+  .badge.Methode { background: var(--methode); }
+  .card.soon { opacity: .6; border-style: dashed; border-left-style: solid; }
+  .soon-note { font-size: .8rem; font-style: italic; color: var(--ink-soft); }
+
+  .empty { text-align: center; color: var(--ink-soft); padding: 2rem 0; }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 1.2rem 1.25rem;
+    font-size: .85rem;
+    color: var(--ink-soft);
+  }
+  footer a { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <p class="kicker">Politik und Wirtschaft</p>
+    <h1>Gesellschaft verstehen, mitreden, entscheiden</h1>
+    <p class="sub">Erklärungen, interaktive Materialien, Methoden und Übungen von Klasse 7 bis zum Abitur</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="controls">
+    <input class="search" id="search" type="search" placeholder="Suchen, z. B. Wahlen, Markt, EU, Sozialstaat …" aria-label="Suchen">
+    <div class="row" id="stufen-row"><span class="row-label">Stufe:</span></div>
+    <div class="row" id="typen-row"><span class="row-label">Art:</span></div>
+  </div>
+
+  <div id="content"></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    Verantwortlich: Max Mustermann ·
+    <a href="impressum.html">Impressum</a> ·
+    <a href="../mathe/">Zur Mathematik-Seite</a> ·
+    Diese Seite verwendet keine Cookies und speichert keine Daten.
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   HIER PFLEGST DU DEINE INHALTE
+   Für ein neues Material einfach einen Eintrag kopieren und anpassen.
+   link: Pfad zur Datei (z. B. "q-phase/sozialstaat.html").
+         Leer lassen ("") = wird als "in Vorbereitung" angezeigt.
+   typ:  "Erklärung", "Interaktiv", "Übung" oder "Methode"
+   kategorie: muss einer der Kategorien unten entsprechen
+   ========================================================= */
+
+const KATEGORIEN = [
+  { id: "klasse78",  name: "Klasse 7 und 8",        stufe: "Sek I",  beschreibung: "Zusammenleben, Mitbestimmung in Schule und Gemeinde, Grundrechte, Verbraucher" },
+  { id: "klasse910", name: "Klasse 9 und 10",       stufe: "Sek I",  beschreibung: "Wahlen und Parteien, politisches System, Markt und Wirtschaft, Medien" },
+  { id: "e-phase",   name: "Einführungsphase",      stufe: "E",      beschreibung: "Grundlagen der Oberstufe, Partizipation, Wirtschaftsordnung" },
+  { id: "q-phase",   name: "Qualifikationsphase",   stufe: "Q1 bis Q4", beschreibung: "Wirtschaftspolitik, Sozialstaat, Europa, internationale Beziehungen, Abiturvorbereitung" }
+];
+
+const INHALTE = [
+  { titel: "Wie entsteht ein Gesetz?", beschreibung: "Der Weg eines Gesetzes durch Bundestag und Bundesrat Schritt für Schritt.", kategorie: "klasse78", typ: "Erklärung", link: "" },
+  { titel: "Grundrechte-Quiz", beschreibung: "Welches Grundrecht ist betroffen? Alltagssituationen zuordnen.", kategorie: "klasse78", typ: "Übung", link: "" },
+  { titel: "Mitbestimmung in der Gemeinde", beschreibung: "Wer entscheidet was in Hanau? Akteure und Wege der Beteiligung.", kategorie: "klasse78", typ: "Erklärung", link: "" },
+
+  { titel: "Wahlsystem-Simulator", beschreibung: "Erst- und Zweitstimme ausprobieren und die Sitzverteilung berechnen lassen.", kategorie: "klasse910", typ: "Interaktiv", link: "" },
+  { titel: "Angebot und Nachfrage", beschreibung: "Den Marktpreis per Schieberegler beeinflussen und das Gleichgewicht beobachten.", kategorie: "klasse910", typ: "Interaktiv", link: "" },
+  { titel: "Karikaturen analysieren", beschreibung: "Beschreiben, deuten, beurteilen: die Methode mit Beispielen.", kategorie: "klasse910", typ: "Methode", link: "" },
+
+  { titel: "Pro-Contra-Debatte", beschreibung: "Ablauf, Rollen und Bewertungsbogen für strukturierte Debatten.", kategorie: "e-phase", typ: "Methode", link: "" },
+  { titel: "Soziale Marktwirtschaft", beschreibung: "Grundprinzipien und Spannungsfelder kompakt erklärt.", kategorie: "e-phase", typ: "Erklärung", link: "" },
+
+  { titel: "Konjunkturzyklus", beschreibung: "Phasen der Konjunktur und Instrumente der Wirtschaftspolitik interaktiv erkunden.", kategorie: "q-phase", typ: "Interaktiv", link: "" },
+  { titel: "Der Sozialstaat", beschreibung: "Säulen der Sozialversicherung und aktuelle Reformdebatten.", kategorie: "q-phase", typ: "Erklärung", link: "" },
+  { titel: "Institutionen der EU", beschreibung: "Kommission, Rat und Parlament: Wer macht was?", kategorie: "q-phase", typ: "Übung", link: "" },
+  { titel: "Operatoren im Abitur", beschreibung: "Erläutern, erörtern, beurteilen: was genau verlangt wird, mit Beispielaufgaben.", kategorie: "q-phase", typ: "Methode", link: "" }
+];
+
+/* ========= Ab hier musst du nichts mehr ändern ========= */
+
+const TYPEN = ["Erklärung", "Interaktiv", "Übung", "Methode"];
+let aktiveStufe = "alle";
+let aktiverTyp = "alle";
+let suchtext = "";
+
+function chip(label, value, gruppe) {
+  const b = document.createElement("button");
+  b.className = "chip";
+  b.textContent = label;
+  b.dataset.value = value;
+  b.addEventListener("click", () => {
+    if (gruppe === "stufe") aktiveStufe = value; else aktiverTyp = value;
+    aktualisiereChips();
+    render();
+  });
+  return b;
+}
+
+function baueFilter() {
+  const sRow = document.getElementById("stufen-row");
+  sRow.appendChild(chip("Alle", "alle", "stufe"));
+  KATEGORIEN.forEach(k => sRow.appendChild(chip(k.name, k.id, "stufe")));
+  const tRow = document.getElementById("typen-row");
+  tRow.appendChild(chip("Alle", "alle", "typ"));
+  TYPEN.forEach(t => tRow.appendChild(chip(t, t, "typ")));
+  aktualisiereChips();
+}
+
+function aktualisiereChips() {
+  document.querySelectorAll("#stufen-row .chip").forEach(c =>
+    c.classList.toggle("active", c.dataset.value === aktiveStufe));
+  document.querySelectorAll("#typen-row .chip").forEach(c =>
+    c.classList.toggle("active", c.dataset.value === aktiverTyp));
+}
+
+function passt(item) {
+  if (aktiveStufe !== "alle" && item.kategorie !== aktiveStufe) return false;
+  if (aktiverTyp !== "alle" && item.typ !== aktiverTyp) return false;
+  if (suchtext) {
+    const t = (item.titel + " " + item.beschreibung).toLowerCase();
+    if (!t.includes(suchtext)) return false;
+  }
+  return true;
+}
+
+function karte(item) {
+  const el = document.createElement(item.link ? "a" : "div");
+  el.className = "card" + (item.link ? "" : " soon");
+  if (item.link) el.href = item.link;
+  const h = document.createElement("h3"); h.textContent = item.titel;
+  const p = document.createElement("p"); p.textContent = item.beschreibung;
+  const meta = document.createElement("div"); meta.className = "meta";
+  const b = document.createElement("span"); b.className = "badge " + item.typ; b.textContent = item.typ;
+  meta.appendChild(b);
+  el.append(h, p, meta);
+  if (!item.link) {
+    const s = document.createElement("span"); s.className = "soon-note"; s.textContent = "in Vorbereitung";
+    el.appendChild(s);
+  }
+  return el;
+}
+
+function render() {
+  const c = document.getElementById("content");
+  c.innerHTML = "";
+  let gefunden = 0;
+  KATEGORIEN.forEach(k => {
+    const items = INHALTE.filter(i => i.kategorie === k.id && passt(i));
+    if (!items.length) return;
+    gefunden += items.length;
+    const sec = document.createElement("section"); sec.className = "cat";
+    const h = document.createElement("h2"); h.textContent = k.name + " (" + k.stufe + ")";
+    const d = document.createElement("p"); d.className = "cat-desc"; d.textContent = k.beschreibung;
+    const g = document.createElement("div"); g.className = "grid";
+    items.forEach(i => g.appendChild(karte(i)));
+    sec.append(h, d, g);
+    c.appendChild(sec);
+  });
+  if (!gefunden) {
+    c.innerHTML = '<p class="empty">Keine passenden Inhalte gefunden.</p>';
+  }
+}
+
+document.getElementById("search").addEventListener("input", e => {
+  suchtext = e.target.value.trim().toLowerCase();
+  render();
+});
+
+baueFilter();
+render();
+</script>
+</body>
+</html>
