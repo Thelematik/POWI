@@ -265,12 +265,39 @@
     h1.title{font-size:2rem;}
     .wrap{padding-block:28px 48px;}
   }
+
+  /* Schriftgröße: Grundgröße 17px, über A− und A+ einstellbar */
+  html{font-size:17px;}
+  body{font-size:1rem;}
+  .wrap{max-width:820px;}
+  .mast-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .fontsize{display:flex;gap:6px;}
+  .fontsize button{
+    font-family:"Source Sans 3", system-ui, sans-serif;
+    font-size:0.9rem;
+    font-weight:600;
+    min-width:2.6em;
+    padding:4px 10px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    color:var(--text);
+    cursor:pointer;
+  }
+  .fontsize button:hover{border-color:var(--text);}
+  .fontsize button:disabled{opacity:.4;cursor:default;}
 </style>
 
 <div class="wrap">
 
   <header class="masthead">
-    <span class="eyebrow-top">Politikunterricht · Gymnasiale Oberstufe</span>
+    <div class="mast-top">
+      <span class="eyebrow-top">Politikunterricht · Gymnasiale Oberstufe</span>
+      <div class="fontsize" role="group" aria-label="Schriftgröße">
+        <button type="button" id="fsm" title="Schrift kleiner" aria-label="Schrift kleiner">A−</button>
+        <button type="button" id="fsp" title="Schrift größer" aria-label="Schrift größer">A+</button>
+      </div>
+    </div>
     <h1 class="title">Konfliktkompass</h1>
     <p class="subtitle">Ein Fragenkatalog mit elf Analysekategorien für die politikwissenschaftliche Untersuchung aktueller Kriege und Konflikte, anwendbar auf jeden Konflikt, den der Unterricht behandelt.</p>
   </header>
@@ -510,5 +537,21 @@
   </footer>
 
 </div>
+
+<script>
+(function(){
+  var scales=[0.82,0.9,1,1.12,1.25,1.4,1.6], si=2, base=17;
+  var minus=document.getElementById('fsm'), plus=document.getElementById('fsp');
+  try{var v=parseInt(localStorage.getItem('kk-scale'),10); if(v>=0&&v<scales.length) si=v;}catch(e){}
+  function apply(){
+    document.documentElement.style.fontSize=(base*scales[si])+'px';
+    minus.disabled=si===0; plus.disabled=si===scales.length-1;
+    try{localStorage.setItem('kk-scale',si);}catch(e){}
+  }
+  minus.onclick=function(){if(si>0){si--;apply();}};
+  plus.onclick=function(){if(si<scales.length-1){si++;apply();}};
+  apply();
+})();
+</script>
 
 </body></html>
