@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Das Fischerei-Experiment: Gruppenversion</title>
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<style>
+
+:root{
+  --bg:#f3f7f8; --card:#ffffff; --ink:#15303a; --muted:#5a6f78; --line:#d6e2e6;
+  --water1:#7cc4dc; --water2:#2f7fa3; --fish:#f2a541; --accent:#1f7a8c; --accent-ink:#fff;
+  --good:#2e8b57; --warn:#c0562b; --p1:#c0562b; --p2:#1f7a8c; --soft:#e7f1f4;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f1c21; --card:#16282f; --ink:#e4eff2; --muted:#9db3bb; --line:#2a434c;
+    --water1:#2b6f88; --water2:#123f52; --fish:#f2b25e; --accent:#3fa7bd; --accent-ink:#0b1a1f;
+    --good:#5cc08a; --warn:#ec8a5e; --p1:#ec8a5e; --p2:#3fa7bd; --soft:#1c343c;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.5;-webkit-text-size-adjust:100%}
+.wrap{max-width:600px;margin:0 auto;padding:12px 14px 40px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0 10px}
+header.top .brand{font-weight:700;font-size:16px}
+header.top .tools{display:flex;gap:8px}
+header.top .brand{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iconbtn{white-space:nowrap;min-height:44px;min-width:44px;padding:0 10px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:15px;font-weight:600;cursor:pointer}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin:12px 0}
+h1{font-size:26px;line-height:1.2;margin:4px 0 10px}
+h2{font-size:21px;line-height:1.25;margin:0 0 10px}
+h3{font-size:17px;margin:14px 0 6px}
+p{margin:8px 0}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.btn{display:block;width:100%;min-height:54px;border:0;border-radius:14px;background:var(--accent);color:var(--accent-ink);font-size:18px;font-weight:700;cursor:pointer;margin-top:14px}
+.btn.secondary{background:var(--soft);color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+input[type=text],textarea{width:100%;min-height:50px;font-size:17px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-family:inherit}
+textarea{min-height:90px;resize:vertical}
+ul.rules{padding-left:20px;margin:8px 0}
+ul.rules li{margin:4px 0}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;background:var(--soft);font-size:14px;font-weight:600}
+.lake{width:100%;height:auto;display:block;border-radius:14px}
+.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.stat{background:var(--soft);border-radius:12px;padding:10px 8px;text-align:center}
+.stat .v{font-size:24px;font-weight:800;line-height:1.1}
+.stat .l{font-size:12.5px;color:var(--muted);margin-top:2px}
+.stepper{display:flex;align-items:center;gap:10px;margin:12px 0 4px}
+.stepper button{width:60px;height:60px;border-radius:16px;border:1px solid var(--line);background:var(--soft);color:var(--ink);font-size:30px;font-weight:700;cursor:pointer;flex:none}
+.stepper .val{flex:1;text-align:center}
+.stepper .val .n{font-size:44px;font-weight:800;line-height:1}
+.stepper .val .u{font-size:14px;color:var(--muted)}
+input[type=range]{width:100%;height:44px;accent-color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:15.5px}
+th,td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:right}
+th:first-child,td:first-child{text-align:left}
+th{font-size:13px;color:var(--muted);font-weight:600}
+tr.me td{font-weight:700}
+.note{background:var(--soft);border-radius:12px;padding:12px;margin:10px 0;font-size:15.5px}
+.note.warn{border-left:5px solid var(--warn)}
+.note.good{border-left:5px solid var(--good)}
+.boat{display:flex;gap:10px;align-items:flex-start;margin:8px 0}
+.boat .ic{font-size:26px;line-height:1}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin-top:6px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:18px;height:4px;border-radius:2px}
+.chart{width:100%;height:auto;display:block}
+.q{border-top:1px solid var(--line);padding-top:12px;margin-top:14px}
+.opts{display:grid;gap:8px;margin-top:8px}
+.opt{min-height:50px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:16px;text-align:left;cursor:pointer;font-family:inherit}
+.opt.sel{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
+.opt.right{border-color:var(--good);box-shadow:inset 0 0 0 2px var(--good)}
+.opt.wrong{border-color:var(--warn);box-shadow:inset 0 0 0 2px var(--warn)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fb{margin-top:8px;font-size:15.5px}
+.grid4{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px;font-size:14.5px;margin-top:8px}
+.grid4 div{padding:10px 8px;border-radius:10px;background:var(--soft)}
+.grid4 .h{background:transparent;font-weight:700;font-size:13px;color:var(--muted);display:flex;align-items:center}
+.grid4 .hl{box-shadow:inset 0 0 0 2px var(--fish)}
+details{border:1px solid var(--line);border-radius:14px;padding:4px 14px;margin:12px 0;background:var(--card)}
+summary{min-height:48px;display:flex;align-items:center;font-weight:700;cursor:pointer}
+.resultcard{border:2px solid var(--accent)}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;z-index:10;padding:12px}
+.overlay.show{display:flex}
+.sheet{background:var(--card);color:var(--ink);border-radius:18px;max-width:600px;width:100%;max-height:85vh;overflow:auto;padding:18px}
+.hidden{display:none!important}
+.progress{height:8px;background:var(--soft);border-radius:4px;overflow:hidden;margin:6px 0 2px}
+.progress i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.fishg{transition:opacity .6s}
+
+.plist{display:grid;gap:8px;margin-top:8px}
+.plist .row{display:flex;gap:8px;align-items:center}
+.plist .row span{font-size:22px;width:30px;text-align:center}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.seg button{min-height:50px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:18px;font-weight:700;cursor:pointer}
+.seg button.sel{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
+.toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:54px;margin-top:10px}
+.toggle input{width:28px;height:28px;accent-color:var(--accent);flex:none}
+.handover{text-align:center;padding:30px 18px}
+.handover .big{font-size:64px;line-height:1;margin:10px 0}
+.handover h1{font-size:30px}
+.dots{display:flex;gap:8px;justify-content:center;margin:14px 0}
+.dots i{width:14px;height:14px;border-radius:50%;background:var(--line)}
+.dots i.done{background:var(--accent)}
+.dots i.now{background:var(--fish)}
+tr.sum td{font-weight:700;border-top:2px solid var(--line)}
+.modecard{display:grid;gap:8px;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">🎣 Der See · Gruppe</div>
+    <div class="tools">
+      <button class="iconbtn" id="helpBtn">? Hilfe</button>
+      <button class="iconbtn" id="restartBtn">↺ Neustart</button>
+    </div>
+  </header>
+
+  <!-- SETUP -->
+  <section id="s-setup">
+    <div class="card">
+      <span class="pill">PoWi · Einführungsphase · E.2.2</span>
+      <h1>Der gemeinsame See</h1>
+      <p>Ihr seid eine Gruppe von Fischerinnen und Fischern, die sich einen See teilen. Jede Person steuert ein Boot. Das Tablet wird in jeder Runde reihum weitergegeben, und jede Person gibt ihren Fang <b>verdeckt</b> ein.</p>
+      <svg class="lake" id="lakeStart" viewBox="0 0 300 150" role="img" aria-label="See mit Fischen"></svg>
+
+      <h3>Wie viele Boote seid ihr?</h3>
+      <div class="seg" id="countSeg">
+        <button data-n="3">3</button><button data-n="4" class="sel">4</button><button data-n="5">5</button>
+      </div>
+
+      <h3>Eure Namen oder Kürzel</h3>
+      <div class="plist" id="nameList"></div>
+
+      <label class="toggle"><span>Nach jeder Runde die Fänge <b>aller einzelnen Boote</b> zeigen<br><span class="small muted">Aus: Es wird nur der Gesamtfang der Gruppe gezeigt.</span></span><input type="checkbox" id="showInd" checked></label>
+
+      <h3>Die Regeln</h3>
+      <ul class="rules" id="rulesList"></ul>
+      <button class="btn" id="startBtn">Leinen los!</button>
+    </div>
+  </section>
+
+  <!-- HANDOVER -->
+  <section id="s-handover" class="hidden">
+    <div class="card handover">
+      <span class="pill" id="hoPhase">Phase 1 · Runde 1</span>
+      <div class="dots" id="hoDots"></div>
+      <div class="big">📱</div>
+      <p class="muted">Gib das Tablet weiter an</p>
+      <h1 id="hoName">…</h1>
+      <p class="small muted">Die anderen schauen bitte weg.</p>
+      <button class="btn" id="hoBtn">Ich bin bereit</button>
+    </div>
+  </section>
+
+  <!-- DECIDE -->
+  <section id="s-decide" class="hidden">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+        <span class="pill" id="phaseLabel">Phase 1</span>
+        <span class="muted small" id="roundLabel">Runde 1 von 8</span>
+      </div>
+      <div class="progress"><i id="progressBar" style="width:0%"></i></div>
+      <svg class="lake" id="lakeGame" viewBox="0 0 300 150" role="img" aria-label="See"></svg>
+      <div class="statrow">
+        <div class="stat"><div class="v" id="stStock">100</div><div class="l">Fische im See</div></div>
+        <div class="stat"><div class="v" id="stMine">0</div><div class="l">deine Punkte</div></div>
+        <div class="stat"><div class="v" id="stQuota">10</div><div class="l">max. Fang</div></div>
+      </div>
+      <div id="modeNote" class="note good hidden"></div>
+    </div>
+    <div class="card">
+      <h2 id="decideTitle">Wie viele Fische fängst du?</h2>
+      <div class="stepper">
+        <button id="minusBtn" aria-label="weniger">−</button>
+        <div class="val"><div class="n" id="catchVal">5</div><div class="u">Fische</div></div>
+        <button id="plusBtn" aria-label="mehr">+</button>
+      </div>
+      <input type="range" id="catchRange" min="0" max="10" step="1" value="5" aria-label="Fangmenge">
+      <button class="btn" id="castBtn">Entscheidung abgeben</button>
+    </div>
+  </section>
+
+  <!-- ROUND RESULT -->
+  <section id="s-round" class="hidden">
+    <div class="card">
+      <span class="pill" id="rrPhase">Phase 1</span>
+      <h2 id="rrTitle">Ergebnis der Runde</h2>
+      <svg class="lake" id="lakeRes" viewBox="0 0 300 150" role="img" aria-label="See"></svg>
+      <table>
+        <thead><tr><th>Boot</th><th>wollte</th><th>bekam</th><th>gesamt</th></tr></thead>
+        <tbody id="resBody"></tbody>
+      </table>
+      <div class="note" id="resStockNote"></div>
+      <button class="btn" id="nextBtn">Nächste Runde</button>
+    </div>
+  </section>
+
+  <!-- BETWEEN -->
+  <section id="s-between" class="hidden">
+    <div class="card">
+      <span class="pill">Ende von Phase 1</span>
+      <h2 id="betweenTitle">Phase 1 ist vorbei</h2>
+      <div class="statrow">
+        <div class="stat"><div class="v" id="bAll">0</div><div class="l">Fang der Gruppe</div></div>
+        <div class="stat"><div class="v" id="bSust">0</div><div class="l">nachhaltig möglich</div></div>
+        <div class="stat"><div class="v" id="bStock">0</div><div class="l">Fische übrig</div></div>
+      </div>
+      <p id="betweenText"></p>
+      <h3>Wie soll es in Phase 2 weitergehen?</h3>
+      <p class="small muted">Der See wird neu besetzt. Entscheidet selbst oder nach Vorgabe eurer Lehrkraft:</p>
+      <div class="modecard">
+        <button class="opt sel" data-mode="quota"><b>⚖️ Fangquote</b><br><span class="small muted">Eine Behörde erlaubt jedem Boot höchstens 5 Fische pro Runde. Das wird kontrolliert.</span></button>
+        <button class="opt" data-mode="talk"><b>💬 Absprache</b><br><span class="small muted">Ihr dürft euch vor jeder Runde kurz beraten. Es gibt aber keine Kontrolle: Jede Person darf weiterhin bis zu 10 Fische fangen.</span></button>
+      </div>
+      <button class="btn" id="phase2Btn">Phase 2 starten</button>
+    </div>
+  </section>
+
+  <!-- TALK -->
+  <section id="s-talk" class="hidden">
+    <div class="card handover">
+      <span class="pill" id="tkPhase">Phase 2 · Runde 1</span>
+      <div class="big">💬</div>
+      <h1>Beratungszeit</h1>
+      <p>Legt das Tablet in die Mitte und sprecht euch ab. Ob sich alle daran halten, sieht man erst nach der Runde.</p>
+      <div class="statrow">
+        <div class="stat"><div class="v" id="tkStock">0</div><div class="l">Fische im See</div></div>
+        <div class="stat"><div class="v" id="tkSust">0</div><div class="l">nachhaltig pro Boot</div></div>
+        <div class="stat"><div class="v" id="tkTime">60</div><div class="l">Sekunden</div></div>
+      </div>
+      <button class="btn" id="tkBtn">Beratung beenden</button>
+    </div>
+  </section>
+
+  <!-- EVAL -->
+  <section id="s-eval" class="hidden">
+    <div class="card resultcard">
+      <span class="pill">Ergebnis der Gruppe</span>
+      <h2 id="evalTitle">Auswertung</h2>
+      <table>
+        <thead><tr><th>Punkte</th><th>Phase 1<br>ohne Regel</th><th id="p2head">Phase 2</th></tr></thead>
+        <tbody id="cmpBody"></tbody>
+      </table>
+      <h3>Fischbestand im Verlauf</h3>
+      <svg class="chart" id="chart" viewBox="0 0 340 210" role="img" aria-label="Verlauf des Fischbestands"></svg>
+      <div class="legend">
+        <span><i style="background:var(--p1)"></i>Phase 1 ohne Regel</span>
+        <span><i style="background:var(--p2)"></i><span id="p2legend">Phase 2</span></span>
+      </div>
+      <p class="muted small">Tipp: Macht einen Screenshot dieser Karte, damit die Ergebnisse aller Gruppen im Plenum verglichen werden können.</p>
+      <button class="btn secondary" id="copyBtn">Ergebnis als Text kopieren</button>
+      <p class="small muted" id="copyMsg"></p>
+    </div>
+
+    <div class="card">
+      <h2>Was wäre nachhaltig gewesen?</h2>
+      <p id="sustExplain"></p>
+      <div class="statrow">
+        <div class="stat"><div class="v" id="suA">20</div><div class="l">Fische pro Runde für alle</div></div>
+        <div class="stat"><div class="v">5</div><div class="l">pro Boot und Runde</div></div>
+        <div class="stat"><div class="v">40</div><div class="l">Punkte pro Boot in 8 Runden</div></div>
+      </div>
+      <p id="sustText"></p>
+    </div>
+
+    <div class="card">
+      <h2>Nachdenken</h2>
+      <div class="q" style="border-top:0;margin-top:0;padding-top:0">
+        <b>1. Warum lohnt es sich für jedes einzelne Boot, mehr zu fangen?</b>
+        <div class="opts" data-q="1">
+          <button class="opt" data-ok="0">Weil mehr Fische im See dann schneller nachwachsen.</button>
+          <button class="opt" data-ok="1">Weil der Gewinn eines zusätzlichen Fisches ganz bei mir landet, der Schaden für den Bestand aber auf alle verteilt wird.</button>
+          <button class="opt" data-ok="0">Weil die anderen Boote sowieso immer nachhaltig fischen.</button>
+        </div>
+        <div class="fb" data-fb="1"></div>
+      </div>
+      <div class="q">
+        <b>2. Welche Eigenschaften hat der Fischbestand im See als Gut?</b>
+        <p class="small muted">Rivalität: Was ich fange, kann niemand anders mehr fangen.</p>
+        <div class="two" data-q="2a"><button class="opt" data-ok="1">rival</button><button class="opt" data-ok="0">nicht rival</button></div>
+        <p class="small muted">Ausschließbarkeit: Man kann andere leicht von der Nutzung abhalten.</p>
+        <div class="two" data-q="2b"><button class="opt" data-ok="0">ausschließbar</button><button class="opt" data-ok="1">nicht ausschließbar</button></div>
+        <div class="fb" data-fb="2"></div>
+      </div>
+      <div class="q">
+        <b>3. Welches dieser Beispiele ist ebenfalls ein Allmendegut?</b>
+        <div class="opts" data-q="3">
+          <button class="opt" data-ok="0">Ein Brötchen beim Bäcker</button>
+          <button class="opt" data-ok="1">Das Grundwasser in einer Region</button>
+          <button class="opt" data-ok="0">Ein Streaming-Abo</button>
+          <button class="opt" data-ok="0">Ein Leuchtturm an der Küste</button>
+        </div>
+        <div class="fb" data-fb="3"></div>
+      </div>
+      <div class="q">
+        <b>4. Besprecht in der Gruppe: Wie habt ihr euch in Phase 1 verhalten? Gab es Boote, die mehr genommen haben als andere, und wie habt ihr darauf reagiert?</b>
+        <textarea placeholder="Notizen der Gruppe (werden nicht gespeichert)"></textarea>
+      </div>
+      <div class="q">
+        <b id="q5">5. Was hat in Phase 2 den Unterschied gemacht? Welche weiteren Lösungen wären denkbar?</b>
+        <textarea placeholder="z. B. Kontrolle, Vertrauen, Steuern, Eigentumsrechte …"></textarea>
+        <button class="btn secondary" id="ideaBtn" style="min-height:48px;font-size:16px">Ideen anzeigen</button>
+        <div class="note hidden" id="ideas">
+          <b>Mögliche Ansätze:</b>
+          <ul class="rules">
+            <li><b>Ge- und Verbote</b> (Quoten, Schonzeiten): wirksam, aber aufwendig zu kontrollieren.</li>
+            <li><b>Abgabe pro Fisch</b> (Umweltsteuer): macht Übernutzung teurer, die genaue Höhe ist schwer festzulegen.</li>
+            <li><b>Handelbare Fanglizenzen</b> (Zertifikate): Die Gesamtmenge ist begrenzt, Lizenzen gehen dorthin, wo sie am meisten bringen.</li>
+            <li><b>Eigentumsrechte</b>: Gehört der See einer Person, hat sie ein Interesse am Erhalt. Wer darf dann noch fischen?</li>
+            <li><b>Selbstorganisation</b> der Nutzer: Absprachen und gegenseitige Kontrolle (Elinor Ostrom). Funktioniert vor allem in kleinen Gruppen mit Vertrauen und Sanktionsmöglichkeiten.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Wissen: Güterarten</h2>
+      <p>Ökonominnen und Ökonomen unterscheiden Güter danach, ob sie <b>rival</b> sind und ob man andere von der Nutzung <b>ausschließen</b> kann.</p>
+      <div class="grid4">
+        <div class="h"></div><div class="h">ausschließbar</div><div class="h">nicht ausschließbar</div>
+        <div class="h">rival</div>
+        <div><b>Privates Gut</b><br><span class="muted">Brötchen, Kleidung</span></div>
+        <div class="hl"><b>Allmendegut</b><br><span class="muted">Fischbestand, Grundwasser, Weideland</span></div>
+        <div class="h">nicht rival</div>
+        <div><b>Kollektivgut (Klubgut)</b><br><span class="muted">Streaming-Abo, Bezahlfernsehen</span></div>
+        <div><b>Öffentliches Gut</b><br><span class="muted">Leuchtturm, Deich, Landesverteidigung</span></div>
+      </div>
+      <p class="small muted">Die Begriffe werden in der Literatur nicht ganz einheitlich verwendet. Maßgeblich sind die beiden Kriterien.</p>
+      <h3>Die Tragik der Allmende</h3>
+      <p>Bei Allmendegütern kann niemand ausgeschlossen werden, gleichzeitig nimmt jede Nutzung den anderen etwas weg. Jeder Einzelne erhält den vollen Vorteil seiner Nutzung, die Kosten der Übernutzung tragen aber alle gemeinsam. Diese Kosten, die nicht beim Verursacher anfallen, heißen <b>negative externe Effekte</b>. Ohne Regeln führt individuell rationales Verhalten deshalb oft zur Zerstörung der Ressource, obwohl das niemand will. Der Biologe Garrett Hardin hat dafür 1968 den Begriff <i>Tragedy of the Commons</i> geprägt. Die Ökonomin Elinor Ostrom hat später gezeigt, dass Gemeinschaften Allmenden auch selbst erfolgreich verwalten können, wenn bestimmte Bedingungen erfüllt sind (2009 Nobelpreis für Wirtschaftswissenschaften).</p>
+      <h3>Reale Beispiele</h3>
+      <ul class="rules">
+        <li><b>Überfischung der Meere:</b> Viele Fischbestände weltweit gelten als überfischt.</li>
+        <li><b>Grundwasser:</b> Wenn Landwirtschaft und Industrie mehr entnehmen, als nachfließt, sinkt der Spiegel für alle.</li>
+        <li><b>Klima als globale Allmende:</b> Die Atmosphäre nimmt CO₂ aller Staaten auf; die Folgen tragen alle.</li>
+      </ul>
+    </div>
+
+    <details>
+      <summary>Hinweise für Lehrkräfte</summary>
+      <h3>Organisation</h3>
+      <p>Pro Gruppe von 3 bis 5 Personen ein Tablet oder Smartphone. Die Seite braucht nach dem Laden keine Internetverbindung, keine Konten und speichert keine Daten. Zeitbedarf etwa 25 Minuten für das Spiel (durch das Weitergeben etwas länger als die Einzelversion) und 25 Minuten Auswertung.</p>
+      <h3>Einbettung</h3>
+      <p>KCGO Politik und Wirtschaft, Einführungsphase, Themenfeld <b>E.2.2</b> (negative externe Effekte, Güterarten, Übernutzung von Allmendegütern). Fachkategorien: Knappheit, Nutzen und Kosten, externe Effekte und Internalisierung, Interessen und Zielkonflikte.</p>
+      <h3>Zwei Varianten für Phase 2</h3>
+      <p><b>Fangquote</b> bildet ein ordnungsrechtliches Instrument ab (Anknüpfung an E.2.3). <b>Absprache</b> ohne Kontrolle testet Selbstorganisation im Sinne Ostroms. Besonders ergiebig ist es, die Klasse aufzuteilen: Die Hälfte der Gruppen spielt mit Quote, die andere mit Absprache. Im Plenum lassen sich dann Bestände und Punkte vergleichen.</p>
+      <h3>Parameter</h3>
+      <p>Der Startbestand beträgt 25 Fische pro Boot (bei 4 Booten also 100), die Vermehrung 25&nbsp;% des Restbestands. Ein Fang von 5 Fischen pro Boot und Runde ist damit genau nachhaltig, die Quote entspricht dem nachhaltigen Ertrag.</p>
+      <h3>Impulsfragen für das Unterrichtsgespräch</h3>
+      <ul class="rules">
+        <li>Welche Gruppe hatte am Ende von Phase 1 den größten Bestand, welche die meisten Punkte? Was sagt das über individuelle und kollektive Rationalität?</li>
+        <li>Hat die Absprache gehalten? Woran lag es? Was müsste in der Realität hinzukommen (Kontrolle, Sanktionen, Vertrauen)?</li>
+        <li>Ist eine staatliche Quote die beste Lösung? Vergleicht sie mit einer Abgabe pro Fisch und mit handelbaren Fanglizenzen nach Effizienz und Legitimität.</li>
+      </ul>
+    </details>
+  </section>
+</div>
+
+<div class="overlay" id="helpOv" role="dialog" aria-modal="true">
+  <div class="sheet">
+    <h2>Hilfe</h2>
+    <p><b>Ablauf:</b> In jeder Runde wird das Tablet reihum weitergegeben. Wer dran ist, tippt auf <b>Ich bin bereit</b>, wählt mit <b>−</b>, <b>+</b> oder dem Schieberegler die Fangmenge und tippt auf <b>Entscheidung abgeben</b>. Die anderen schauen dabei weg.</p>
+    <p><b>Nach jeder Runde</b> seht ihr gemeinsam das Ergebnis.</p>
+    <p><b>Vermehrung:</b> Nach jeder Runde wachsen 25&nbsp;% der übrigen Fische nach, höchstens bis zum Startbestand. Bei sehr wenigen Fischen gibt es keinen Nachwuchs mehr.</p>
+    <p><b>Phase 2:</b> Fangquote (höchstens 5 Fische) oder Absprache ohne Kontrolle.</p>
+    <button class="btn" id="helpClose">Verstanden</button>
+  </div>
+</div>
+<div class="overlay" id="restartOv" role="dialog" aria-modal="true">
+  <div class="sheet">
+    <h2>Neu starten?</h2>
+    <p>Der Spielstand der Gruppe geht dabei verloren.</p>
+    <button class="btn" id="restartYes">Ja, neu starten</button>
+    <button class="btn secondary" id="restartNo">Abbrechen</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var ROUNDS=8, GROWTH=0.25, PER=25, ICONS=["⛵","🚤","🛶","⛴️","🚣"];
+  var S, N=4, names=["","","","",""];
+  function fresh(){
+    var max=PER*N;
+    return {n:N, max:max, minBreed:Math.round(max*0.1), names:[], phase:1, mode:"none", round:1, stock:max, idx:0, picks:[], pick:5,
+      hist:{1:[],2:[]}, totals:{1:new Array(N).fill(0),2:new Array(N).fill(0)}, ended:{1:false,2:false}, showInd:true};
+  }
+  var $=function(id){return document.getElementById(id);};
+  var SECTIONS=["s-setup","s-handover","s-decide","s-round","s-between","s-talk","s-eval"];
+  function show(id){ SECTIONS.forEach(function(s){$(s).classList.toggle("hidden",s!==id);}); window.scrollTo(0,0); }
+  function sum(a){return a.reduce(function(x,y){return x+y;},0);}
+  function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+
+  /* lake */
+  var FISHPOS=(function(){var arr=[],seed=7;function r(){seed=(seed*9301+49297)%233280;return seed/233280;}var t=0;
+    while(arr.length<20&&t<2000){t++;var a=r()*Math.PI*2,rr=Math.sqrt(r())*0.82,x=150+Math.cos(a)*rr*125,y=78+Math.sin(a)*rr*50;
+      if(arr.every(function(p){return Math.hypot(p.x-x,p.y-y)>22;}))arr.push({x:x,y:y,flip:r()<0.5,s:0.8+r()*0.4});}return arr;})();
+  function drawLake(svg,stock,max){
+    var n=Math.round(Math.max(0,stock)/max*20), css=getComputedStyle(document.documentElement);
+    var w1=css.getPropertyValue("--water1").trim(),w2=css.getPropertyValue("--water2").trim(),f=css.getPropertyValue("--fish").trim();
+    var h='<defs><radialGradient id="wg'+svg.id+'" cx="50%" cy="40%" r="65%"><stop offset="0%" stop-color="'+w1+'"/><stop offset="100%" stop-color="'+w2+'"/></radialGradient></defs>';
+    h+='<ellipse cx="150" cy="78" rx="146" ry="68" fill="url(#wg'+svg.id+')"/>';
+    h+='<path d="M40 50 q10 -6 20 0 M230 110 q10 -6 20 0 M200 40 q8 -5 16 0" stroke="rgba(255,255,255,.35)" stroke-width="2" fill="none"/>';
+    FISHPOS.forEach(function(p,i){var sx=p.flip?-1:1;
+      h+='<g class="fishg" opacity="'+(i<n?1:0)+'" transform="translate('+p.x.toFixed(1)+' '+p.y.toFixed(1)+') scale('+(sx*p.s).toFixed(2)+' '+p.s.toFixed(2)+')"><ellipse cx="0" cy="0" rx="9" ry="4.6" fill="'+f+'"/><path d="M-8 0 L-15 -5 L-15 5 Z" fill="'+f+'"/><circle cx="5" cy="-1.2" r="1.1" fill="#123"/></g>';});
+    if(stock<=0)h+='<text x="150" y="84" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">Der See ist leer</text>';
+    svg.innerHTML=h;
+  }
+
+  /* setup */
+  function renderSetup(){
+    Array.prototype.forEach.call($("countSeg").children,function(b){b.classList.toggle("sel",+b.dataset.n===N);});
+    var h="";
+    for(var i=0;i<N;i++){h+='<div class="row"><span>'+ICONS[i]+'</span><input type="text" maxlength="20" data-i="'+i+'" placeholder="Boot '+(i+1)+'" value="'+esc(names[i])+'" autocomplete="off"></div>';}
+    $("nameList").innerHTML=h;
+    var max=PER*N;
+    $("rulesList").innerHTML=
+      '<li>Im See leben zu Beginn <b>'+max+' Fische</b>. Mehr haben keinen Platz.</li>'+
+      '<li>In jeder Runde entscheidet jede Person verdeckt, wie viele Fische sie fängt: <b>0 bis 10</b>.</li>'+
+      '<li>Nach jeder Runde vermehren sich die übrigen Fische um <b>25&nbsp;%</b>.</li>'+
+      '<li>Sinkt der Bestand unter <b>'+Math.round(max*0.1)+' Fische</b>, finden die Fische keine Partner mehr und vermehren sich nicht.</li>'+
+      '<li>Wollen alle zusammen mehr fangen, als im See ist, wird der Rest anteilig verteilt.</li>'+
+      '<li>Jeder gefangene Fisch bringt <b>1 Punkt</b>. Ziel: möglichst viele Punkte für dich.</li>'+
+      '<li>Es gibt zwei Phasen mit je 8 Runden.</li>';
+    drawLake($("lakeStart"),max,max);
+  }
+  $("countSeg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;N=+b.dataset.n;renderSetup();});
+  $("nameList").addEventListener("input",function(e){if(e.target.dataset.i!==undefined)names[+e.target.dataset.i]=e.target.value;});
+
+  function pname(i){return S.names[i];}
+  function quota(){return S.mode==="quota"?5:10;}
+
+  function startGame(){
+    S=fresh(); S.showInd=$("showInd").checked;
+    for(var i=0;i<N;i++){var v=(names[i]||"").trim();S.names.push(v||("Boot "+(i+1)));}
+    startRound();
+  }
+  function startRound(){
+    S.idx=0; S.picks=[];
+    if(S.phase===2&&S.mode==="talk") showTalk(); else showHandover();
+  }
+
+  /* talk timer */
+  var timer=null;
+  function showTalk(){
+    $("tkPhase").textContent="Phase 2 · Runde "+S.round;
+    $("tkStock").textContent=S.stock;
+    $("tkSust").textContent=Math.round(S.stock*0.2/S.n*10)/10;
+    var t=60; $("tkTime").textContent=t;
+    clearInterval(timer);
+    timer=setInterval(function(){t--; $("tkTime").textContent=Math.max(0,t); if(t<=0)clearInterval(timer);},1000);
+    show("s-talk");
+  }
+  $("tkBtn").addEventListener("click",function(){clearInterval(timer);showHandover();});
+
+  function showHandover(){
+    $("hoPhase").textContent="Phase "+S.phase+" · Runde "+S.round+" von "+ROUNDS;
+    var d="";for(var i=0;i<S.n;i++)d+='<i class="'+(i<S.idx?"done":(i===S.idx?"now":""))+'"></i>';
+    $("hoDots").innerHTML=d;
+    $("hoName").textContent=ICONS[S.idx]+" "+pname(S.idx);
+    show("s-handover");
+  }
+  $("hoBtn").addEventListener("click",showDecide);
+
+  function setPick(v){S.pick=Math.max(0,Math.min(quota(),v));$("catchVal").textContent=S.pick;$("catchRange").value=S.pick;}
+  function showDecide(){
+    $("phaseLabel").textContent=S.phase===1?"Phase 1 · ohne Regel":(S.mode==="quota"?"Phase 2 · Fangquote":"Phase 2 · Absprache");
+    $("roundLabel").textContent="Runde "+S.round+" von "+ROUNDS;
+    $("progressBar").style.width=((S.round-1)/ROUNDS*100)+"%";
+    $("stStock").textContent=S.stock;
+    $("stMine").textContent=S.totals[S.phase][S.idx];
+    $("stQuota").textContent=quota();
+    var mn=$("modeNote");
+    if(S.phase===2){mn.classList.remove("hidden");
+      mn.innerHTML=S.mode==="quota"?"⚖️ <b>Fangquote:</b> Höchstens <b>5 Fische</b> pro Boot und Runde.":"💬 <b>Absprache:</b> Denk an eure Vereinbarung. Kontrolliert wird sie nicht.";
+    } else mn.classList.add("hidden");
+    $("decideTitle").textContent=pname(S.idx)+", wie viele Fische fängst du?";
+    $("catchRange").max=quota();
+    setPick(Math.min(5,quota()));
+    drawLake($("lakeGame"),S.stock,S.max);
+    show("s-decide");
+  }
+  $("minusBtn").addEventListener("click",function(){setPick(S.pick-1);});
+  $("plusBtn").addEventListener("click",function(){setPick(S.pick+1);});
+  $("catchRange").addEventListener("input",function(e){setPick(parseInt(e.target.value,10));});
+  $("castBtn").addEventListener("click",function(){
+    S.picks.push(S.pick); S.idx++;
+    if(S.idx<S.n) showHandover(); else resolveRound();
+  });
+
+  function distribute(w,stock){
+    var s=sum(w); if(s<=stock)return w.slice();
+    var raw=w.map(function(x){return x*stock/s;}), got=raw.map(Math.floor), rest=stock-sum(got);
+    var ord=raw.map(function(r,i){return{i:i,f:r-Math.floor(r)};}).sort(function(a,b){return b.f-a.f;});
+    for(var k=0;k<rest;k++)got[ord[k].i]++; return got;
+  }
+  function regrow(rest){ if(rest<S.minBreed)return rest; return Math.min(S.max,Math.round(rest*(1+GROWTH))); }
+
+  function resolveRound(){
+    var before=S.stock, wishes=S.picks.slice(), got=distribute(wishes,before), caught=sum(got), rest=before-caught, after=regrow(rest);
+    var tot=S.totals[S.phase]; got.forEach(function(g,i){tot[i]+=g;});
+    S.hist[S.phase].push({before:before,wishes:wishes,got:got,rest:rest,after:after});
+    S.stock=after;
+    var body="";
+    if(S.showInd){
+      for(var i=0;i<S.n;i++) body+='<tr><td>'+ICONS[i]+' '+esc(pname(i))+'</td><td>'+wishes[i]+'</td><td>'+got[i]+'</td><td>'+tot[i]+'</td></tr>';
+    }
+    body+='<tr class="sum"><td>Gruppe gesamt</td><td>'+sum(wishes)+'</td><td>'+caught+'</td><td>'+sum(tot)+'</td></tr>';
+    $("resBody").innerHTML=body;
+    $("rrPhase").textContent=$("phaseLabel").textContent;
+    $("rrTitle").textContent="Ergebnis von Runde "+S.round;
+    var note=$("resStockNote"), txt="Gefangen wurden <b>"+caught+"</b> Fische"+(sum(wishes)>before?" (gewünscht waren "+sum(wishes)+", es reichte nicht für alle)":"")+". ";
+    var sust=Math.round(before*0.2);
+    if(after===0){txt+="Der See ist <b>leergefischt</b>.";note.className="note warn";}
+    else if(rest<S.minBreed){txt+="Nur noch <b>"+rest+"</b> Fische: zu wenige, um sich zu vermehren.";note.className="note warn";}
+    else{txt+="Übrig blieben "+rest+", dazu kamen <b>"+(after-rest)+"</b> Jungfische. Jetzt leben <b>"+after+"</b> Fische im See.";note.className=after<before?"note warn":"note good";}
+    if(after>0) txt+=" <span class='small muted'>(Nachhaltig wären in dieser Runde "+sust+" Fische für alle gewesen.)</span>";
+    note.innerHTML=txt;
+    var last=(S.round>=ROUNDS||after===0); if(last)S.ended[S.phase]=true;
+    $("nextBtn").textContent=last?(S.phase===1?"Zum Ende von Phase 1":"Zur Auswertung"):"Nächste Runde";
+    drawLake($("lakeRes"),after,S.max);
+    show("s-round");
+  }
+  $("nextBtn").addEventListener("click",function(){
+    if(S.ended[S.phase]){ if(S.phase===1)toBetween(); else toEval(); return; }
+    S.round++; startRound();
+  });
+
+  var chosenMode="quota";
+  function toBetween(){
+    var t=S.totals[1], sustAll=S.max*0.2*ROUNDS;
+    $("bAll").textContent=sum(t); $("bSust").textContent=sustAll; $("bStock").textContent=S.stock;
+    var txt;
+    if(S.stock===0){$("betweenTitle").textContent="Der See ist leer";txt="Nach "+S.hist[1].length+" Runden war kein Fisch mehr übrig.";}
+    else if(S.stock<S.max/2){$("betweenTitle").textContent="Der See ist stark überfischt";txt="Am Ende sind nur noch "+S.stock+" von "+S.max+" Fischen im See.";}
+    else{$("betweenTitle").textContent="Der See hat überlebt";txt="Am Ende sind noch "+S.stock+" von "+S.max+" Fischen im See. Wie habt ihr das geschafft?";}
+    $("betweenText").textContent=txt;
+    show("s-between");
+  }
+  document.querySelector("#s-between .modecard").addEventListener("click",function(e){
+    var b=e.target.closest(".opt");if(!b)return; chosenMode=b.dataset.mode;
+    Array.prototype.forEach.call(this.children,function(c){c.classList.toggle("sel",c===b);});
+  });
+  $("phase2Btn").addEventListener("click",function(){
+    S.phase=2;S.mode=chosenMode;S.round=1;S.stock=S.max; startRound();
+  });
+
+  /* eval */
+  function seriesOf(p){var pts=[S.max];S.hist[p].forEach(function(r){pts.push(r.after);});return pts;}
+  function drawChart(){
+    var svg=$("chart"),W=340,H=210,L=34,R=10,T=10,B=30,css=getComputedStyle(document.documentElement);
+    var line=css.getPropertyValue("--line").trim(),muted=css.getPropertyValue("--muted").trim(),p1=css.getPropertyValue("--p1").trim(),p2=css.getPropertyValue("--p2").trim();
+    function X(i){return L+(W-L-R)*i/ROUNDS;} function Y(v){return T+(H-T-B)*(1-v/S.max);}
+    var h="";
+    [0,.25,.5,.75,1].forEach(function(f){var v=Math.round(S.max*f);
+      h+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke="'+line+'"/>';
+      h+='<text x="'+(L-6)+'" y="'+(Y(v)+4)+'" text-anchor="end" font-size="11" fill="'+muted+'">'+v+'</text>';});
+    for(var i=0;i<=ROUNDS;i++)h+='<text x="'+X(i)+'" y="'+(H-17)+'" text-anchor="middle" font-size="11" fill="'+muted+'">'+i+'</text>';
+    h+='<text x="'+((L+W-R)/2)+'" y="'+H+'" text-anchor="middle" font-size="11" fill="'+muted+'">Runde</text>';
+    [[seriesOf(1),p1],[seriesOf(2),p2]].forEach(function(sc){
+      h+='<polyline points="'+sc[0].map(function(v,i){return X(i).toFixed(1)+","+Y(v).toFixed(1);}).join(" ")+'" fill="none" stroke="'+sc[1]+'" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>';
+      sc[0].forEach(function(v,i){h+='<circle cx="'+X(i)+'" cy="'+Y(v)+'" r="3.5" fill="'+sc[1]+'"/>';});});
+    svg.innerHTML=h;
+  }
+  function toEval(){
+    var t1=S.totals[1],t2=S.totals[2],e1=S.hist[1][S.hist[1].length-1].after,e2=S.hist[2][S.hist[2].length-1].after;
+    var mlabel=S.mode==="quota"?"mit Quote":"mit Absprache";
+    $("p2head").innerHTML="Phase 2<br>"+mlabel; $("p2legend").textContent="Phase 2 "+mlabel;
+    var b="";
+    for(var i=0;i<S.n;i++)b+='<tr><td>'+ICONS[i]+' '+esc(pname(i))+'</td><td>'+t1[i]+'</td><td>'+t2[i]+'</td></tr>';
+    b+='<tr class="sum"><td>Gruppe gesamt</td><td>'+sum(t1)+'</td><td>'+sum(t2)+'</td></tr>';
+    b+='<tr><td>Runden gespielt</td><td>'+S.hist[1].length+'</td><td>'+S.hist[2].length+'</td></tr>';
+    b+='<tr><td>Fische am Ende</td><td>'+e1+'</td><td>'+e2+'</td></tr>';
+    $("cmpBody").innerHTML=b;
+    drawChart();
+    var sustRound=S.max*0.2, sustAll=sustRound*ROUNDS;
+    $("suA").textContent=sustRound;
+    $("sustExplain").innerHTML="Bei "+S.max+" Fischen wachsen nach einem Fang von "+sustRound+" Fischen genau wieder "+sustRound+" nach ("+(S.max-sustRound)+" + 25&nbsp;% = "+S.max+"). Der See bleibt dann dauerhaft voll.";
+    $("sustText").innerHTML="Eure Gruppe hat in Phase 1 <b>"+sum(t1)+"</b> und in Phase 2 <b>"+sum(t2)+"</b> Fische gefangen. Nachhaltig möglich wären <b>"+sustAll+"</b> gewesen, und das Jahr für Jahr.";
+    $("q5").textContent=S.mode==="quota"?"5. Die Quote wurde automatisch durchgesetzt. Wäre das in der Realität auch so? Welche weiteren Lösungen wären denkbar?":"5. Hat eure Absprache gehalten? Was hätte geholfen, damit sich alle daran halten? Welche weiteren Lösungen wären denkbar?";
+    var lines=["Fischerei-Experiment (Gruppe, "+S.n+" Boote)","Phase 1 ohne Regel: Gruppe "+sum(t1)+" Fische, "+S.hist[1].length+" Runden, Bestand am Ende "+e1+" von "+S.max,
+      "Phase 2 "+mlabel+": Gruppe "+sum(t2)+" Fische, "+S.hist[2].length+" Runden, Bestand am Ende "+e2+" von "+S.max,"Nachhaltig möglich: "+sustAll+" Fische","Punkte je Boot (Phase 1 / Phase 2):"];
+    for(var j=0;j<S.n;j++)lines.push("  "+pname(j)+": "+t1[j]+" / "+t2[j]);
+    S.summary=lines.join("\n");
+    show("s-eval");
+  }
+
+  /* questions */
+  var FB={"1":{ok:"Genau. Den Nutzen eines zusätzlichen Fisches hast du allein, die Kosten (weniger Fische für alle) werden auf alle verteilt. Das ist ein negativer externer Effekt.",no:"Nicht ganz. Überlege, wer den Vorteil eines zusätzlichen Fisches hat und wer den Nachteil trägt."},
+    "2":{ok:"Richtig: rival und nicht ausschließbar. Genau diese Kombination macht ein Allmendegut aus.",no:"Noch nicht ganz. Kann ein Fisch zweimal gefangen werden? Und könnte man andere Boote einfach vom See fernhalten?"},
+    "3":{ok:"Richtig. Grundwasser ist rival (was einer abpumpt, fehlt anderen) und kaum ausschließbar.",no:"Leider nicht. Gesucht ist ein Gut, das rival und zugleich nicht ausschließbar ist."}};
+  document.addEventListener("click",function(e){
+    var btn=e.target.closest("[data-q] .opt"); if(!btn)return;
+    var grp=btn.parentNode,q=grp.getAttribute("data-q");
+    Array.prototype.forEach.call(grp.querySelectorAll(".opt"),function(o){o.classList.remove("sel","right","wrong");});
+    btn.classList.add("sel",btn.dataset.ok==="1"?"right":"wrong");
+    if(q==="2a"||q==="2b"){var a=document.querySelector('[data-q="2a"] .sel'),b=document.querySelector('[data-q="2b"] .sel');
+      if(a&&b){var ok=a.dataset.ok==="1"&&b.dataset.ok==="1";document.querySelector('[data-fb="2"]').innerHTML=ok?"✅ "+FB["2"].ok:"🤔 "+FB["2"].no;}return;}
+    document.querySelector('[data-fb="'+q+'"]').innerHTML=btn.dataset.ok==="1"?"✅ "+FB[q].ok:"🤔 "+FB[q].no;
+  });
+  $("ideaBtn").addEventListener("click",function(){$("ideas").classList.toggle("hidden");});
+  $("copyBtn").addEventListener("click",function(){var m=$("copyMsg");
+    try{navigator.clipboard.writeText(S.summary||"").then(function(){m.textContent="Kopiert. Ihr könnt den Text jetzt z. B. in ein Etherpad oder eine Nachricht einfügen.";},function(){m.textContent="Kopieren war nicht möglich. Macht bitte einen Screenshot.";});}
+    catch(err){m.textContent="Kopieren war nicht möglich. Macht bitte einen Screenshot.";}});
+
+  /* header */
+  $("startBtn").addEventListener("click",startGame);
+  $("helpBtn").addEventListener("click",function(){$("helpOv").classList.add("show");});
+  $("helpClose").addEventListener("click",function(){$("helpOv").classList.remove("show");});
+  $("restartBtn").addEventListener("click",function(){$("restartOv").classList.add("show");});
+  $("restartNo").addEventListener("click",function(){$("restartOv").classList.remove("show");});
+  $("restartYes").addEventListener("click",function(){
+    $("restartOv").classList.remove("show"); clearInterval(timer); chosenMode="quota";
+    Array.prototype.forEach.call(document.querySelectorAll("#s-between .opt"),function(c){c.classList.toggle("sel",c.dataset.mode==="quota");});
+    Array.prototype.forEach.call(document.querySelectorAll("[data-q] .opt"),function(o){o.classList.remove("sel","right","wrong");});
+    Array.prototype.forEach.call(document.querySelectorAll(".fb"),function(f){f.innerHTML="";});
+    Array.prototype.forEach.call(document.querySelectorAll("textarea"),function(t){t.value="";});
+    $("ideas").classList.add("hidden");$("copyMsg").textContent="";
+    renderSetup(); show("s-setup");
+  });
+  ["helpOv","restartOv"].forEach(function(id){$(id).addEventListener("click",function(e){if(e.target.id===id)$(id).classList.remove("show");});});
+  S=fresh(); renderSetup();
+})();
+</script>
+</body>
+</html>

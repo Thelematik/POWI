@@ -1,0 +1,514 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Konfliktkompass</title>
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<style>
+  :root{
+    --bg:#f5f1e9;
+    --surface:#ffffff;
+    --surface-2:#eee6d8;
+    --text:#211d18;
+    --text-muted:#6c6255;
+    --accent:#9a3324;
+    --accent-soft:#f0ded6;
+    --accent-2:#2e4a5c;
+    --accent-2-soft:#dfe7ea;
+    --line:#ddd2bc;
+    --shadow: 0 1px 2px rgba(33,29,24,0.06);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#181410;
+      --surface:#211c17;
+      --surface-2:#2a231c;
+      --text:#eee6d9;
+      --text-muted:#b0a494;
+      --accent:#e2896e;
+      --accent-soft:#3a2820;
+      --accent-2:#8fb2c4;
+      --accent-2-soft:#233038;
+      --line:#3a3128;
+      --shadow: none;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#181410;
+    --surface:#211c17;
+    --surface-2:#2a231c;
+    --text:#eee6d9;
+    --text-muted:#b0a494;
+    --accent:#e2896e;
+    --accent-soft:#3a2820;
+    --accent-2:#8fb2c4;
+    --accent-2-soft:#233038;
+    --line:#3a3128;
+    --shadow: none;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Source Sans 3", system-ui, sans-serif;
+    padding-inline:20px;
+    padding-block:0;
+    line-height:1.55;
+  }
+  .wrap{
+    max-width:740px;
+    margin:0 auto;
+    padding-block:40px 64px;
+  }
+
+  h1,h2,h3{
+    font-family:"Fraunces", Georgia, serif;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    text-wrap:balance;
+    margin:0;
+  }
+
+  header.masthead{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    padding-bottom:28px;
+    border-bottom:2px solid var(--text);
+    margin-bottom:28px;
+  }
+  .eyebrow-top{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.72rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:600;
+  }
+  h1.title{
+    font-size:2.6rem;
+    line-height:1.02;
+  }
+  p.subtitle{
+    font-size:1.05rem;
+    color:var(--text-muted);
+    max-width:56ch;
+    margin:0;
+  }
+
+  nav.toc{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:36px;
+  }
+  nav.toc a{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.74rem;
+    letter-spacing:0.02em;
+    text-decoration:none;
+    color:var(--text);
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:6px 12px;
+    white-space:nowrap;
+  }
+  nav.toc a:hover{
+    border-color:var(--accent);
+    color:var(--accent);
+  }
+  nav.toc a span{color:var(--text-muted);}
+
+  section.intro{
+    margin-bottom:40px;
+  }
+  section.intro p{
+    margin:0 0 12px;
+    max-width:64ch;
+  }
+  section.intro p:last-child{margin-bottom:0;}
+
+  .category{
+    padding-block:32px;
+    border-top:1px solid var(--line);
+    scroll-margin-top:16px;
+  }
+  .category:first-of-type{border-top:none;}
+
+  .cat-head{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    margin-bottom:10px;
+  }
+  .cat-num{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.78rem;
+    font-weight:600;
+    letter-spacing:0.06em;
+    color:var(--accent);
+    white-space:nowrap;
+  }
+  .cat-head h2{
+    font-size:1.5rem;
+  }
+  .cat-intro{
+    color:var(--text-muted);
+    max-width:62ch;
+    margin:0 0 16px;
+  }
+
+  ul.questions{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  ul.questions li{
+    position:relative;
+    padding-left:20px;
+    max-width:64ch;
+  }
+  ul.questions li::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0.55em;
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--accent);
+  }
+
+  .panel{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:22px 24px;
+    box-shadow:var(--shadow);
+    margin-bottom:24px;
+  }
+  .panel h3{
+    font-size:1.15rem;
+    margin-bottom:10px;
+    color:var(--accent-2);
+  }
+  .panel.methods{
+    margin-top:8px;
+  }
+  .panel p{margin:0 0 10px;}
+  .panel p:last-child{margin-bottom:0;}
+  .panel ul{
+    margin:0;
+    padding-left:1.1em;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .panel ul li strong{color:var(--text);}
+
+  .checklist{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(150px,1fr));
+    gap:8px;
+    margin-top:6px;
+  }
+  .checklist div{
+    background:var(--accent-2-soft);
+    border-radius:8px;
+    padding:10px 12px;
+    font-size:0.85rem;
+    color:var(--text);
+    display:flex;
+    gap:8px;
+    align-items:baseline;
+  }
+  .checklist div b{
+    font-family:"IBM Plex Mono", monospace;
+    color:var(--accent-2);
+    font-size:0.75rem;
+  }
+
+  .sources{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .sources .item{
+    padding-bottom:12px;
+    border-bottom:1px solid var(--line);
+  }
+  .sources .item:last-child{border-bottom:none;padding-bottom:0;}
+  .sources .item a{
+    color:var(--accent-2);
+    font-weight:600;
+    text-decoration:none;
+  }
+  .sources .item a:hover{text-decoration:underline;}
+  .sources .item p{
+    margin:4px 0 0;
+    color:var(--text-muted);
+    font-size:0.92rem;
+    max-width:60ch;
+  }
+
+  footer{
+    margin-top:40px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    color:var(--text-muted);
+    font-size:0.82rem;
+  }
+
+  @media (max-width:480px){
+    h1.title{font-size:2rem;}
+    .wrap{padding-block:28px 48px;}
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <span class="eyebrow-top">Politikunterricht · Gymnasiale Oberstufe</span>
+    <h1 class="title">Konfliktkompass</h1>
+    <p class="subtitle">Ein Fragenkatalog mit elf Analysekategorien für die politikwissenschaftliche Untersuchung aktueller Kriege und Konflikte, anwendbar auf jeden Konflikt, den der Unterricht behandelt.</p>
+  </header>
+
+  <nav class="toc" aria-label="Kategorien">
+    <a href="#grunddaten"><span>01</span> Grunddaten</a>
+    <a href="#genese"><span>02</span> Genese</a>
+    <a href="#akteure"><span>03</span> Akteure</a>
+    <a href="#interessen"><span>04</span> Interessen</a>
+    <a href="#macht"><span>05</span> Macht</a>
+    <a href="#eskalation"><span>06</span> Eskalation</a>
+    <a href="#international"><span>07</span> International</a>
+    <a href="#folgen"><span>08</span> Folgen</a>
+    <a href="#loesungen"><span>09</span> Lösungen</a>
+    <a href="#zukunft"><span>10</span> Zukunft</a>
+    <a href="#medien"><span>11</span> Medien</a>
+  </nav>
+
+  <section class="intro">
+    <p>Eine politikwissenschaftliche Konfliktanalyse fragt nicht nur, was in einem Krieg oder Konflikt geschieht, sondern warum die beteiligten Parteien so handeln, welche Interessen und Machtverhältnisse dahinterstehen und welche Handlungsoptionen sich daraus ergeben. Der folgende Fragenkatalog fasst dafür etablierte Kategorien aus der Konflikt- und Friedensforschung zusammen, unter anderem das Analyseschema von Hermann Giesecke, das Eskalationsmodell von Friedrich Glasl, die sogenannte Konfliktzwiebel aus der zivilen Konfliktbearbeitung sowie Ansätze der bpb zur schulischen Konfliktanalyse.</p>
+    <p>Die elf Kategorien lassen sich auf nahezu jeden aktuellen Konflikt anwenden, unabhängig davon, ob es sich um einen zwischenstaatlichen Krieg, einen Bürgerkrieg oder einen langanhaltenden politischen Konflikt handelt. Sie müssen nicht vollständig und in dieser Reihenfolge bearbeitet werden. Je nach Lerngruppe, Zeitrahmen und Unterrichtsziel kann eine Auswahl sinnvoller sein als die vollständige Bearbeitung.</p>
+  </section>
+
+  <section class="category" id="grunddaten">
+    <div class="cat-head">
+      <span class="cat-num">01</span>
+      <h2>Grunddaten und Konfliktgegenstand</h2>
+    </div>
+    <p class="cat-intro">Am Anfang jeder Konfliktanalyse steht ein möglichst genauer Überblick über den Gegenstand des Konflikts. Diese Fragen liefern den sachlichen Rahmen, auf dem alle weiteren Kategorien aufbauen.</p>
+    <ul class="questions">
+      <li>Um welchen Konflikt handelt es sich, und wie wird er in der öffentlichen Debatte meist bezeichnet?</li>
+      <li>Seit wann besteht der Konflikt in seiner aktuellen Form, und wo findet er räumlich statt?</li>
+      <li>Handelt es sich um einen zwischenstaatlichen, einen innerstaatlichen oder einen transnationalen Konflikt?</li>
+      <li>Worum wird konkret gestritten: Territorium, Ressourcen, politische Macht, Ideologie, Religion oder kollektive Identität?</li>
+      <li>Überlagern sich mehrere dieser Streitgegenstände, oder lässt sich der Konflikt eindeutig einem zuordnen?</li>
+    </ul>
+  </section>
+
+  <section class="category" id="genese">
+    <div class="cat-head">
+      <span class="cat-num">02</span>
+      <h2>Genese und historische Entwicklung</h2>
+    </div>
+    <p class="cat-intro">Kein aktueller Konflikt lässt sich verstehen, ohne seine Vorgeschichte zu kennen. Diese Fragen ordnen den Konflikt in seine zeitliche Entwicklung ein.</p>
+    <ul class="questions">
+      <li>Wie und wann ist der Konflikt historisch entstanden, und welche Ereignisse markieren wichtige Wendepunkte?</li>
+      <li>Welche früheren Phasen der Eskalation oder Deeskalation lassen sich unterscheiden?</li>
+      <li>Welche Erzählung über die Entstehung des Konflikts vertritt jede der Konfliktparteien, und worin unterscheiden sich diese Geschichtsbilder?</li>
+      <li>Welche Rolle spielen historische Verträge, Grenzziehungen oder frühere Kriege für die heutige Lage?</li>
+    </ul>
+  </section>
+
+  <section class="category" id="akteure">
+    <div class="cat-head">
+      <span class="cat-num">03</span>
+      <h2>Konfliktparteien und weitere Akteure</h2>
+    </div>
+    <p class="cat-intro">Konflikte werden von Menschen und Institutionen getragen. Eine sorgfältige Analyse unterscheidet zwischen den unmittelbar beteiligten Parteien und dem weiteren Kreis von Akteuren, die den Konflikt beeinflussen.</p>
+    <ul class="questions">
+      <li>Wer sind die primären Konfliktparteien, und wie sind sie organisiert, etwa als Staat, Regierung, Militär, bewaffnete Gruppe oder Bevölkerungsgruppe?</li>
+      <li>Welche sekundären Akteure sind beteiligt, etwa Nachbarstaaten, Bündnispartner, internationale Organisationen oder wirtschaftliche Akteure?</li>
+      <li>Sind die Konfliktparteien selbst intern einheitlich, oder bestehen innerhalb einer Partei eigene Machtkämpfe und unterschiedliche Positionen?</li>
+      <li>Welche einzelnen Personen, Institutionen oder Führungsfiguren treffen die entscheidenden Entscheidungen?</li>
+    </ul>
+  </section>
+
+  <section class="category" id="interessen">
+    <div class="cat-head">
+      <span class="cat-num">04</span>
+      <h2>Positionen, Interessen und Bedürfnisse</h2>
+    </div>
+    <p class="cat-intro">Was eine Konfliktpartei öffentlich fordert, ihre Position, ist selten identisch mit dem, was sie eigentlich erreichen will. Das Modell der Konfliktzwiebel unterscheidet drei Ebenen und hilft, hinter die offiziellen Forderungen zu blicken.</p>
+    <ul class="questions">
+      <li>Welche Positionen vertreten die Konfliktparteien öffentlich, und welche konkreten Forderungen leiten sie daraus ab?</li>
+      <li>Welche dahinterliegenden Interessen, etwa wirtschaftliche, sicherheitspolitische oder machtpolitische Ziele, lassen sich erkennen?</li>
+      <li>Welche grundlegenden Bedürfnisse, etwa Sicherheit, Anerkennung, Identität oder wirtschaftliches Überleben, stehen hinter diesen Interessen?</li>
+      <li>An welchen Punkten schließen sich die Interessen der Parteien gegenseitig aus, und wo gäbe es möglicherweise Übereinstimmungen?</li>
+    </ul>
+  </section>
+
+  <section class="category" id="macht">
+    <div class="cat-head">
+      <span class="cat-num">05</span>
+      <h2>Machtverhältnisse und Ressourcen</h2>
+    </div>
+    <p class="cat-intro">Die Chancen, eigene Interessen durchzusetzen, hängen von den verfügbaren Machtmitteln ab. Diese Fragen untersuchen, wie ausgeglichen oder ungleich das Kräfteverhältnis zwischen den Parteien ist.</p>
+    <ul class="questions">
+      <li>Über welche militärischen, wirtschaftlichen, politischen und medialen Machtmittel verfügt jede Konfliktpartei?</li>
+      <li>Ist das Kräfteverhältnis zwischen den Parteien eher symmetrisch oder deutlich asymmetrisch?</li>
+      <li>Von welchen äußeren Faktoren, etwa Rohstoffvorkommen, Waffenlieferungen, Handelsbeziehungen oder Energieabhängigkeiten, hängt die Machtposition der Parteien ab?</li>
+      <li>Wie verändert sich das Kräfteverhältnis im Zeitverlauf, und wer profitiert von dieser Entwicklung?</li>
+    </ul>
+  </section>
+
+  <section class="category" id="eskalation">
+    <div class="cat-head">
+      <span class="cat-num">06</span>
+      <h2>Mittel der Konfliktführung und Eskalationsdynamik</h2>
+    </div>
+    <p class="cat-intro">Konflikte werden mit unterschiedlichen Mitteln geführt, von diplomatischen Gesprächen bis zu offener Gewalt. Eskalationsmodelle wie das neun Stufen umfassende Modell von Friedrich Glasl helfen, den aktuellen Grad der Zuspitzung einzuordnen.</p>
+    <ul class="questions">
+      <li>Mit welchen Mitteln wird der Konflikt derzeit geführt: diplomatisch, wirtschaftlich, propagandistisch oder militärisch?</li>
+      <li>Auf welcher Eskalationsstufe befindet sich der Konflikt aktuell, wenn man ihn zum Beispiel entlang des Eskalationsmodells von Glasl einordnet?</li>
+      <li>Richten sich Gewalthandlungen gezielt gegen die Zivilbevölkerung, und wenn ja, in welcher Form?</li>
+      <li>Gibt es aktuell Anzeichen für eine weitere Eskalation oder für erste Schritte der Deeskalation?</li>
+    </ul>
+  </section>
+
+  <section class="category" id="international">
+    <div class="cat-head">
+      <span class="cat-num">07</span>
+      <h2>Internationale und regionale Einbettung</h2>
+    </div>
+    <p class="cat-intro">Kaum ein heutiger Konflikt bleibt ohne äußere Beteiligung. Diese Fragen richten den Blick auf die internationale Dimension.</p>
+    <ul class="questions">
+      <li>Welche externen Staaten, Bündnisse oder internationalen Organisationen sind auf welche Weise involviert?</li>
+      <li>Welche Interessen verfolgen diese externen Akteure mit ihrem Engagement?</li>
+      <li>Werden Sanktionen, Waffenlieferungen, humanitäre Hilfe oder diplomatische Vermittlung eingesetzt, und mit welcher Wirkung?</li>
+      <li>Wie positionieren sich die großen internationalen Mächte, und welche Rolle spielen die Vereinten Nationen oder regionale Organisationen?</li>
+    </ul>
+  </section>
+
+  <section class="category" id="folgen">
+    <div class="cat-head">
+      <span class="cat-num">08</span>
+      <h2>Folgen des Konflikts und Betroffene</h2>
+    </div>
+    <p class="cat-intro">Konflikte wirken sich auf Menschen und Gesellschaften aus, oft weit über das unmittelbare Konfliktgebiet hinaus. Diese Fragen erfassen das Ausmaß und die Verteilung dieser Folgen.</p>
+    <ul class="questions">
+      <li>Welche humanitären Folgen hat der Konflikt, etwa Todesopfer, Verletzte, Vertreibung oder Flucht?</li>
+      <li>Welche wirtschaftlichen und gesellschaftlichen Folgen entstehen in der Konfliktregion selbst und international, etwa bei Energiepreisen oder Lieferketten?</li>
+      <li>Wer ist von den Folgen besonders betroffen, zum Beispiel die Zivilbevölkerung, Minderheiten oder Kinder?</li>
+      <li>Welche langfristigen Folgen sind für die betroffene Gesellschaft zu erwarten, etwa für Bildung, Infrastruktur oder gesellschaftlichen Zusammenhalt?</li>
+    </ul>
+  </section>
+
+  <section class="category" id="loesungen">
+    <div class="cat-head">
+      <span class="cat-num">09</span>
+      <h2>Bisherige Regelungs- und Lösungsversuche</h2>
+    </div>
+    <p class="cat-intro">Die meisten Konflikte haben bereits eine Geschichte von Verhandlungen und Vermittlungsversuchen. Ihre Untersuchung zeigt, welche Ansätze bereits erprobt wurden.</p>
+    <ul class="questions">
+      <li>Welche Verhandlungen, Abkommen oder Waffenstillstände gab es bisher, und wie lange hielten sie?</li>
+      <li>Warum sind frühere Lösungsversuche gescheitert, beziehungsweise wodurch waren erfolgreiche Ansätze gekennzeichnet?</li>
+      <li>Welche Akteure vermitteln aktuell, und über welche Verhandlungskanäle verfügen sie?</li>
+      <li>Welche Rolle spielt die Zivilgesellschaft, etwa nichtstaatliche Organisationen, bei der Konfliktbearbeitung?</li>
+    </ul>
+  </section>
+
+  <section class="category" id="zukunft">
+    <div class="cat-head">
+      <span class="cat-num">10</span>
+      <h2>Zukunftsperspektiven und eigene Urteilsbildung</h2>
+    </div>
+    <p class="cat-intro">Politische Bildung zielt nicht nur auf Analyse, sondern auch auf ein begründetes eigenes Urteil. Diese Fragen führen von der Beschreibung zur Bewertung.</p>
+    <ul class="questions">
+      <li>Welche Entwicklungsszenarien sind denkbar: Fortsetzung, weitere Eskalation, Verhandlungslösung oder ein Einfrieren des Konflikts?</li>
+      <li>Welche Bedingungen wären notwendig, damit eine dauerhafte und gerechte Lösung entstehen kann?</li>
+      <li>Wie bewerte ich die Handlungsoptionen der beteiligten Akteure, einschließlich der eigenen Regierung oder ihrer Bündnispartner, und wie begründe ich dieses Urteil?</li>
+      <li>Welche eigenen Wertmaßstäbe, etwa Menschenrechte, Selbstbestimmung oder Völkerrecht, lege ich meiner Bewertung zugrunde, und wo geraten diese Maßstäbe im konkreten Fall in Widerspruch zueinander?</li>
+    </ul>
+  </section>
+
+  <section class="category" id="medien">
+    <div class="cat-head">
+      <span class="cat-num">11</span>
+      <h2>Mediale Darstellung und Quellenkritik</h2>
+    </div>
+    <p class="cat-intro">Wie ein Konflikt wahrgenommen wird, hängt entscheidend davon ab, wie über ihn berichtet wird. Diese Fragen schärfen den kritischen Umgang mit Quellen.</p>
+    <ul class="questions">
+      <li>Aus welcher Quelle stammt eine Information oder Darstellung, und aus welcher Perspektive berichtet sie: aus Sicht einer Konfliktpartei, eines externen Akteurs oder journalistisch unabhängig?</li>
+      <li>Welche Begriffe, Bilder und Deutungsmuster werden verwendet, und welche Wirkung haben sie auf die öffentliche Meinung?</li>
+      <li>Woran lassen sich einseitige Darstellung oder Propaganda erkennen, etwa an Auslassungen, Übertreibungen oder emotionalisierender Sprache?</li>
+      <li>Wie unterscheiden sich die Darstellungen unterschiedlicher Medien desselben Ereignisses, und was lässt sich aus diesen Unterschieden schließen?</li>
+    </ul>
+  </section>
+
+  <div class="panel methods">
+    <h3>Hinweise für den Unterricht</h3>
+    <p>Der Fragenkatalog eignet sich für unterschiedliche methodische Zugänge. Einige Vorschläge:</p>
+    <ul>
+      <li><strong>Gruppenpuzzle:</strong> Expertengruppen bearbeiten je eine Kategorie und stellen ihre Ergebnisse anschließend im Plenum vor.</li>
+      <li><strong>Placemat-Methode:</strong> Einzelarbeit zu einer Kategorie, danach Austausch in der Gruppe und Formulierung eines gemeinsamen Ergebnisses.</li>
+      <li><strong>Perspektivwechsel oder Rollenspiel:</strong> Die Fragen zu Interessen und Positionen werden aus der Sicht einer einzelnen Konfliktpartei beantwortet.</li>
+      <li><strong>Vergleichende Analyse:</strong> Zwei aktuelle Konflikte werden mit demselben Fragenkatalog untersucht und ihre Ergebnisse gegenübergestellt.</li>
+      <li><strong>Konfliktportfolio:</strong> Ein Konflikt wird über mehrere Wochen fortlaufend mit dem Fragenkatalog begleitet und aktualisiert.</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Checkliste in Kurzform</h3>
+    <p>Für den schnellen Überblick oder als Tafelanschrieb:</p>
+    <div class="checklist">
+      <div><b>01</b> Grunddaten</div>
+      <div><b>02</b> Genese</div>
+      <div><b>03</b> Akteure</div>
+      <div><b>04</b> Interessen</div>
+      <div><b>05</b> Macht</div>
+      <div><b>06</b> Eskalation</div>
+      <div><b>07</b> International</div>
+      <div><b>08</b> Folgen</div>
+      <div><b>09</b> Lösungen</div>
+      <div><b>10</b> Zukunft</div>
+      <div><b>11</b> Medien</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Verwendete Konzepte und weiterführende Quellen</h3>
+    <div class="sources">
+      <div class="item">
+        <a href="https://www.bpb.de/themen/kriege-konflikte/dossier-kriege-konflikte/504289/konfliktanalyse/" target="_blank" rel="noopener">bpb, Dossier Kriege und Konflikte: Konfliktanalyse</a>
+        <p>Grundlegende Definition und Einordnung der Konfliktanalyse als theorien- und methodengeleitete Untersuchung von Ursachen, Akteuren, Dynamik und Bearbeitungsansätzen.</p>
+      </div>
+      <div class="item">
+        <a href="https://www.grin.com/document/32212" target="_blank" rel="noopener">Konfliktanalyse nach Hermann Giesecke</a>
+        <p>Klassisches didaktisches Kategorienraster für die politische Bildung, unter anderem mit den Kategorien Konkretheit, Interesse und Ideologie.</p>
+      </div>
+      <div class="item">
+        <a href="https://www.friedensbildung-bw.de/konfliktanalysen-arbeitsanregungen" target="_blank" rel="noopener">Friedensbildung Baden-Württemberg: Konfliktbaum und Konfliktzwiebel</a>
+        <p>Praxisorientierte Werkzeuge der zivilen Konfliktbearbeitung zur Unterscheidung von Ursachen, Positionen, Interessen und Bedürfnissen.</p>
+      </div>
+      <div class="item">
+        <a href="https://gewi-im-unterricht.de/konfliktanalyse-teil-1-6-die-genese-des-israel-palaestina-konflikts/" target="_blank" rel="noopener">gewi-im-unterricht.de: Konfliktanalyse im Schulunterricht</a>
+        <p>Mehrteilige Unterrichtsreihe, die eine Konfliktanalyse Schritt für Schritt am Beispiel eines aktuellen Konflikts durchführt.</p>
+      </div>
+      <div class="item">
+        <a href="https://www.sowi-online.de/praxis/methode/konfliktanalyse.html" target="_blank" rel="noopener">sowi-online: Konfliktanalyse als Unterrichtsmethode</a>
+        <p>Methodische Einordnung der Konfliktanalyse in den Ablauf einer Unterrichtseinheit, von der Konfrontation bis zur Generalisierung.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Zur Vertiefung der Eskalationsdynamik eignet sich zusätzlich das Neun-Stufen-Modell von Friedrich Glasl, zur Unterscheidung von Positionen, Interessen und Bedürfnissen das Modell der Konfliktzwiebel aus der zivilen Konfliktbearbeitung.
+  </footer>
+
+</div>
+
+</body></html>
