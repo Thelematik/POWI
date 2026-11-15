@@ -173,6 +173,8 @@ h3{font-size:1.25rem}
   #alt{font-size:.88rem}
   h1,h2,h3{text-wrap:balance}
 }
+/* Schmale Bildschirme: die Liste wächst mit und gibt das Wischen an die Seite weiter */
+@media (max-width:900px){.tabpane{overflow:visible;overscroll-behavior:auto}}
 /* Touchgeräte: senkrecht wischen scrollt die Seite, waagerecht wischen dreht den Globus */
 @media (pointer:coarse){#globe{touch-action:pan-y}}
 </style>
