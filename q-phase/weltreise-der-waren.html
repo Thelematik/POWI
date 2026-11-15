@@ -173,6 +173,8 @@ h3{font-size:1.25rem}
   #alt{font-size:.88rem}
   h1,h2,h3{text-wrap:balance}
 }
+/* Touchgeräte: senkrecht wischen scrollt die Seite, waagerecht wischen dreht den Globus */
+@media (pointer:coarse){#globe{touch-action:pan-y}}
 </style>
 
 <header class="top">
@@ -660,6 +662,7 @@ canvas.addEventListener('pointerup',e=>{
   canvas.classList.remove('drag'); if(!drag) return; const m=drag.moved; drag=null; if(m>4) return;
   const r=canvas.getBoundingClientRect(); onGlobeClick(e.clientX-r.left,e.clientY-r.top);
 });
+canvas.addEventListener('pointercancel',()=>{canvas.classList.remove('drag'); drag=null;});
 canvas.addEventListener('wheel',e=>{e.preventDefault(); setZoom(S.zoom*(e.deltaY<0?1.12:1/1.12));},{passive:false});
 function setZoom(z){S.zoom=Math.max(0.7,Math.min(3.2,z)); S.lastInteract=performance.now();}
 document.getElementById('zin').onclick=()=>setZoom(S.zoom*1.25);
