@@ -160,12 +160,18 @@ h3{font-size:1.25rem}
 .score{font-family:var(--f-display);font-size:1.4rem}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media (max-width:700px){
-  /* Auf dem Handy die Beschriftungen auf dem Globus kompakt halten */
-  .hud .big{font-size:1.55rem}.hud .small{font-size:.7rem}
-  .play{padding:7px 12px;font-size:.85rem}
-  .legend{font-size:.7rem}
-  .seg.sm button{font-size:.74rem;padding:3px 9px}
-  #alt{font-size:.85rem}
+  /* Auf dem Handy: Kennzahlen über, Steuerung unter dem Globus, damit nichts den Globus verdeckt */
+  .stage{display:flex;flex-direction:column;gap:10px;height:auto;aspect-ratio:auto;min-height:0;overflow:visible;padding:12px}
+  .hud{position:static;order:1;max-width:calc(100% - 52px);pointer-events:auto}
+  .hud .big{font-size:1.7rem}.hud .small{font-size:.8rem}
+  #globe{position:relative;inset:auto;order:2;width:100%;height:auto;aspect-ratio:1/1}
+  .player{position:static;order:3}
+  .play{padding:8px 14px;font-size:.9rem}
+  .legend{margin-left:0;background:none;padding:0;font-size:.78rem}
+  .alt{margin-top:6px}
+  .seg.sm button{font-size:.8rem;padding:4px 10px}
+  #alt{font-size:.88rem}
+  h1,h2,h3{text-wrap:balance}
 }
 </style>
 
