@@ -22,11 +22,16 @@ code,kbd,samp,pre{font-family:"Source Code Pro", ui-monospace, monospace}
   --good:#2e8b57; --warn:#c0562b; --p1:#c0562b; --p2:#1f7a8c; --soft:#e7f1f4;
 }
 @media (prefers-color-scheme: dark){
-  :root{
+  :root:not([data-theme="light"]){ color-scheme:dark;
     --bg:#0f1c21; --card:#16282f; --ink:#e4eff2; --muted:#9db3bb; --line:#2a434c;
     --water1:#2b6f88; --water2:#123f52; --fish:#f2b25e; --accent:#3fa7bd; --accent-ink:#0b1a1f;
     --good:#5cc08a; --warn:#ec8a5e; --p1:#ec8a5e; --p2:#3fa7bd; --soft:#1c343c;
   }
+}
+:root[data-theme="dark"]{ color-scheme:dark;
+    --bg:#0f1c21; --card:#16282f; --ink:#e4eff2; --muted:#9db3bb; --line:#2a434c;
+    --water1:#2b6f88; --water2:#123f52; --fish:#f2b25e; --accent:#3fa7bd; --accent-ink:#0b1a1f;
+    --good:#5cc08a; --warn:#ec8a5e; --p1:#ec8a5e; --p2:#3fa7bd; --soft:#1c343c;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
@@ -108,6 +113,7 @@ summary{min-height:48px;display:flex;align-items:center;font-weight:700;cursor:p
     <div class="tools">
       <button class="iconbtn" id="helpBtn" aria-label="Hilfe">? Hilfe</button>
       <button class="iconbtn" id="restartBtn" aria-label="Neustart">↺ Neustart</button>
+      <button class="iconbtn" id="themeBtn" type="button">Dunkel</button>
     </div>
   </header>
 
@@ -671,8 +677,18 @@ summary{min-height:48px;display:flex;align-items:center;font-weight:700;cursor:p
     var mq=window.matchMedia("(prefers-color-scheme: dark)");
     var redraw=function(){ drawLake($("lakeStart"),100); if(!$("s-game").classList.contains("hidden")) drawLake($("lakeGame"),S.stock); if(!$("s-eval").classList.contains("hidden")) drawChart(); };
     if(mq.addEventListener) mq.addEventListener("change", redraw);
+    document.addEventListener("themechange", redraw);
   }
 })();
+</script>
+<script>/* Farbschema: folgt der Systemeinstellung, eine Umschaltung wird gemerkt */
+(function(){var root=document.documentElement,KEY='fisch-theme',mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null,btn=document.getElementById('themeBtn');
+function isDark(){var t=root.getAttribute('data-theme');return t?t==='dark':!!(mq&&mq.matches);}
+function label(){if(!btn)return;var d=isDark();btn.textContent=d?'Hell':'Dunkel';btn.setAttribute('aria-pressed',String(d));btn.title=d?'Zum hellen Design wechseln':'Zum dunklen Design wechseln';}
+function changed(){label();try{document.dispatchEvent(new Event('themechange'));}catch(e){}}
+try{var s=localStorage.getItem(KEY);if(s==='light'||s==='dark')root.setAttribute('data-theme',s);}catch(e){}
+if(btn)btn.addEventListener('click',function(){var n=isDark()?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem(KEY,n);}catch(e){}changed();});
+if(mq&&mq.addEventListener)mq.addEventListener('change',changed);label();})();
 </script>
 </body>
 </html>

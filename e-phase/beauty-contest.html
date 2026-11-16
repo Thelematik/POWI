@@ -22,9 +22,16 @@ code,kbd,samp,pre{font-family:"Source Code Pro", ui-monospace, monospace}
   --target:#c2571a; --good:#2e7d4f; --bad:#b3261e;
 }
 @media (prefers-color-scheme: dark){
-  :root{ --bg:#16181c; --card:#1f2228; --ink:#eceef2; --ink2:#c3c7cf; --muted:#8d939e;
+  :root:not([data-theme="light"]){ color-scheme:dark;
+    --bg:#16181c; --card:#1f2228; --ink:#eceef2; --ink2:#c3c7cf; --muted:#8d939e;
     --line:#33373f; --accent:#8fb0ec; --accent-soft:#283449; --bar:#6f95dd; --bar-hi:#a9c2f1;
-    --target:#f0955c; --good:#6cc493; --bad:#f08b84; }
+    --target:#f0955c; --good:#6cc493; --bad:#f08b84;
+  }
+}
+:root[data-theme="dark"]{ color-scheme:dark;
+    --bg:#16181c; --card:#1f2228; --ink:#eceef2; --ink2:#c3c7cf; --muted:#8d939e;
+    --line:#33373f; --accent:#8fb0ec; --accent-soft:#283449; --bar:#6f95dd; --bar-hi:#a9c2f1;
+    --target:#f0955c; --good:#6cc493; --bad:#f08b84;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:22px/1.45 "Source Sans 3",system-ui,sans-serif}
@@ -39,7 +46,8 @@ textarea{width:100%;min-height:150px;resize:vertical;font-family:"Source Code Pr
 button{font:inherit;font-weight:600;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;cursor:pointer}
 button:hover{border-color:var(--accent)}
 button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-@media (prefers-color-scheme: dark){button.primary{color:#10131a}}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) button.primary{color:#10131a}}
+:root[data-theme="dark"] button.primary{color:#10131a}
 button.ghost{background:transparent}
 main{display:grid;grid-template-columns:minmax(280px,340px) 1fr;gap:18px;padding:10px 28px 40px}
 @media (max-width:900px){main{grid-template-columns:minmax(0,1fr)}}
@@ -98,6 +106,7 @@ details ol{padding-left:20px;margin:8px 0}
       <option value="4/3">4/3</option>
     </select>
     <span class="pill" id="roundPill">Runde 1</span>
+    <button class="ghost" id="themeBtn" type="button">Dunkel</button>
   </div>
 </header>
 
@@ -2752,5 +2761,15 @@ function renderRounds(){
 updP(); renderQR(); renderEntries(); renderResults(); renderRounds();
 })();
 </script>
+<script>/* Farbschema: folgt der Systemeinstellung, eine Umschaltung wird gemerkt */
+(function(){var root=document.documentElement,KEY='bc-theme',mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null,btn=document.getElementById('themeBtn');
+function isDark(){var t=root.getAttribute('data-theme');return t?t==='dark':!!(mq&&mq.matches);}
+function label(){if(!btn)return;var d=isDark();btn.textContent=d?'Hell':'Dunkel';btn.setAttribute('aria-pressed',String(d));btn.title=d?'Zum hellen Design wechseln':'Zum dunklen Design wechseln';}
+function changed(){label();try{document.dispatchEvent(new Event('themechange'));}catch(e){}}
+try{var s=localStorage.getItem(KEY);if(s==='light'||s==='dark')root.setAttribute('data-theme',s);}catch(e){}
+if(btn)btn.addEventListener('click',function(){var n=isDark()?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem(KEY,n);}catch(e){}changed();});
+if(mq&&mq.addEventListener)mq.addEventListener('change',changed);label();})();
+</script>
+<script>document.addEventListener("themechange",function(){try{renderResults();}catch(e){}try{renderRounds();}catch(e){}try{renderQR();}catch(e){}});</script>
 </body>
 </html>

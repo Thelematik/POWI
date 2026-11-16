@@ -23,11 +23,16 @@ code,kbd,samp,pre{font-family:"Source Code Pro", ui-monospace, monospace}
   --good:#2e8b57; --warn:#c0562b; --p1:#c0562b; --p2:#1f7a8c; --soft:#e7f1f4;
 }
 @media (prefers-color-scheme: dark){
-  :root{
+  :root:not([data-theme="light"]){ color-scheme:dark;
     --bg:#0f1c21; --card:#16282f; --ink:#e4eff2; --muted:#9db3bb; --line:#2a434c;
     --water1:#2b6f88; --water2:#123f52; --fish:#f2b25e; --accent:#3fa7bd; --accent-ink:#0b1a1f;
     --good:#5cc08a; --warn:#ec8a5e; --p1:#ec8a5e; --p2:#3fa7bd; --soft:#1c343c;
   }
+}
+:root[data-theme="dark"]{ color-scheme:dark;
+    --bg:#0f1c21; --card:#16282f; --ink:#e4eff2; --muted:#9db3bb; --line:#2a434c;
+    --water1:#2b6f88; --water2:#123f52; --fish:#f2b25e; --accent:#3fa7bd; --accent-ink:#0b1a1f;
+    --good:#5cc08a; --warn:#ec8a5e; --p1:#ec8a5e; --p2:#3fa7bd; --soft:#1c343c;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
@@ -127,6 +132,7 @@ tr.sum td{font-weight:700;border-top:2px solid var(--line)}
     <div class="tools">
       <button class="iconbtn" id="helpBtn">? Hilfe</button>
       <button class="iconbtn" id="restartBtn">↺ Neustart</button>
+      <button class="iconbtn" id="themeBtn" type="button">Dunkel</button>
     </div>
   </header>
 
@@ -410,7 +416,9 @@ tr.sum td{font-weight:700;border-top:2px solid var(--line)}
   var FISHPOS=(function(){var arr=[],seed=7;function r(){seed=(seed*9301+49297)%233280;return seed/233280;}var t=0;
     while(arr.length<20&&t<2000){t++;var a=r()*Math.PI*2,rr=Math.sqrt(r())*0.82,x=150+Math.cos(a)*rr*125,y=78+Math.sin(a)*rr*50;
       if(arr.every(function(p){return Math.hypot(p.x-x,p.y-y)>22;}))arr.push({x:x,y:y,flip:r()<0.5,s:0.8+r()*0.4});}return arr;})();
+  var lastLake={};
   function drawLake(svg,stock,max){
+    lastLake[svg.id]=[stock,max];
     var n=Math.round(Math.max(0,stock)/max*20), css=getComputedStyle(document.documentElement);
     var w1=css.getPropertyValue("--water1").trim(),w2=css.getPropertyValue("--water2").trim(),f=css.getPropertyValue("--fish").trim();
     var h='<defs><radialGradient id="wg'+svg.id+'" cx="50%" cy="40%" r="65%"><stop offset="0%" stop-color="'+w1+'"/><stop offset="100%" stop-color="'+w2+'"/></radialGradient></defs>';
@@ -634,8 +642,18 @@ tr.sum td{font-weight:700;border-top:2px solid var(--line)}
     renderSetup(); show("s-setup");
   });
   ["helpOv","restartOv"].forEach(function(id){$(id).addEventListener("click",function(e){if(e.target.id===id)$(id).classList.remove("show");});});
+  document.addEventListener("themechange",function(){Object.keys(lastLake).forEach(function(id){var a=lastLake[id];drawLake($(id),a[0],a[1]);});if(!$("s-eval").classList.contains("hidden"))drawChart();});
   S=fresh(); renderSetup();
 })();
+</script>
+<script>/* Farbschema: folgt der Systemeinstellung, eine Umschaltung wird gemerkt */
+(function(){var root=document.documentElement,KEY='fischg-theme',mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null,btn=document.getElementById('themeBtn');
+function isDark(){var t=root.getAttribute('data-theme');return t?t==='dark':!!(mq&&mq.matches);}
+function label(){if(!btn)return;var d=isDark();btn.textContent=d?'Hell':'Dunkel';btn.setAttribute('aria-pressed',String(d));btn.title=d?'Zum hellen Design wechseln':'Zum dunklen Design wechseln';}
+function changed(){label();try{document.dispatchEvent(new Event('themechange'));}catch(e){}}
+try{var s=localStorage.getItem(KEY);if(s==='light'||s==='dark')root.setAttribute('data-theme',s);}catch(e){}
+if(btn)btn.addEventListener('click',function(){var n=isDark()?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem(KEY,n);}catch(e){}changed();});
+if(mq&&mq.addEventListener)mq.addEventListener('change',changed);label();})();
 </script>
 </body>
 </html>

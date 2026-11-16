@@ -303,9 +303,10 @@ code,kbd,samp,pre{font-family:"Source Code Pro", ui-monospace, monospace}
   <header class="masthead">
     <div class="mast-top">
       <span class="eyebrow-top">Politikunterricht · Gymnasiale Oberstufe</span>
-      <div class="fontsize" role="group" aria-label="Schriftgröße">
+      <div class="fontsize" role="group" aria-label="Schriftgröße und Farbschema">
         <button type="button" id="fsm" title="Schrift kleiner" aria-label="Schrift kleiner">A−</button>
         <button type="button" id="fsp" title="Schrift größer" aria-label="Schrift größer">A+</button>
+        <button type="button" id="themeBtn">Dunkel</button>
       </div>
     </div>
     <h1 class="title">Konfliktkompass</h1>
@@ -564,4 +565,13 @@ code,kbd,samp,pre{font-family:"Source Code Pro", ui-monospace, monospace}
 })();
 </script>
 
+<script>/* Farbschema: folgt der Systemeinstellung, eine Umschaltung wird gemerkt */
+(function(){var root=document.documentElement,KEY='kk-theme',mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null,btn=document.getElementById('themeBtn');
+function isDark(){var t=root.getAttribute('data-theme');return t?t==='dark':!!(mq&&mq.matches);}
+function label(){if(!btn)return;var d=isDark();btn.textContent=d?'Hell':'Dunkel';btn.setAttribute('aria-pressed',String(d));btn.title=d?'Zum hellen Design wechseln':'Zum dunklen Design wechseln';}
+function changed(){label();try{document.dispatchEvent(new Event('themechange'));}catch(e){}}
+try{var s=localStorage.getItem(KEY);if(s==='light'||s==='dark')root.setAttribute('data-theme',s);}catch(e){}
+if(btn)btn.addEventListener('click',function(){var n=isDark()?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem(KEY,n);}catch(e){}changed();});
+if(mq&&mq.addEventListener)mq.addEventListener('change',changed);label();})();
+</script>
 </body></html>
